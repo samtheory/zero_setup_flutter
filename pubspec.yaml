@@ -1,5 +1,5 @@
 name: zero_setup_flutter
-description: "A new Flutter project."
+description: "A Template Flutter project."
 publish_to: "none"
 
 version: 0.0.1+1
@@ -11,70 +11,103 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # ============================================
   # Navigation
-  go_router: ^17.0.0
+  # ============================================
+  go_router: ^17.0.0 # Declarative routing for Flutter applications
 
+  # ============================================
   # State Management
-  hooks_riverpod: ^3.0.3
-  flutter_hooks: ^0.21.3+1
+  # ============================================
+  hooks_riverpod: ^3.0.3 # State management with Riverpod and Flutter hooks
+  flutter_hooks: ^0.21.3+1 # Lifecycle hooks for functional components
 
+  # ============================================
   # Database
-  isar: ^3.1.0+1
+  # ============================================
+  objectbox: ^5.0.3
 
+  # ============================================
   # Storage
-  shared_preferences: ^2.5.3
-  flutter_secure_storage: ^9.2.4
+  # ============================================
+  shared_preferences: ^2.5.3 # Persistent key-value storage
+  flutter_secure_storage: ^9.2.4 # Secure storage for sensitive data
 
+  # ============================================
   # Networking
-  dio: ^5.9.0
-  retrofit: ^4.9.1
-  pretty_dio_logger: ^1.4.0
-  connectivity_plus: ^7.0.0
+  # ============================================
+  dio: ^5.9.0 # Powerful HTTP client for Dart/Flutter
+  retrofit: ^4.9.1 # Type-safe REST client generator
+  connectivity_plus: ^7.0.0 # Network connectivity status
 
+  # ============================================
   # UI Components
-  flex_color_scheme: ^8.4.0
-  responsive_framework: ^1.5.1
-  cached_network_image: ^3.4.1
-  shimmer: ^3.0.0
-  flutter_animate: ^4.5.2
-  gap: ^3.0.1
-  cupertino_icons: ^1.0.8
+  # ============================================
+  flex_color_scheme: ^8.4.0 # Flexible color schemes for Material themes
+  responsive_framework: ^1.5.1 # Responsive UI framework
+  cached_network_image: ^3.4.1 # Image caching and loading
+  shimmer: ^3.0.0 # Loading shimmer effects
+  flutter_animate: ^4.5.2 # Easy animations for Flutter
+  gap: ^3.0.1 # Spacing widget for consistent gaps
+  cupertino_icons: ^1.0.8 # iOS-style icons
+  flutter_svg: ^2.1.0 # SVG support
 
+  # ============================================
   # Utilities
-  fpdart: ^1.2.0
-  permission_handler: ^12.0.1
-  envied: ^1.3.2
-
+  # ============================================
+  fpdart: ^1.2.0 # Functional programming utilities
+  permission_handler: ^12.0.1 # Handle app permissions
+  envied: ^1.3.2 # Environment variable management
+  device_info_plus: ^11.3.4 # Device info
+  package_info_plus: ^8.3.0 # Package info
+  url_launcher: ^6.3.1 # URL launcher
+  path_provider: ^2.1.5 # Path utilities
+  collection: ^1.19.1 # Collection utilities
+  toastification: ^3.0.3 # Toast notifications
+  intl: ^0.20.2 # Internationalization
+  shamsi_date: ^1.1.1 # Jalali date support
+  # ============================================
   # Logging
-  talker: ^5.1.5
-  talker_dio_logger: ^5.1.5
-  talker_flutter: ^5.1.5
-  talker_riverpod_logger: ^5.1.5
-  talker_logger: ^5.1.5
+  # ============================================
+  talker_dio_logger: ^5.1.5 # Dio logger for Talker
+  talker_flutter: ^5.1.5 # Flutter integration for Talker
+  talker_riverpod_logger: ^5.1.5 # Riverpod logger for Talker
 
+  # ============================================
   # Code Generation Annotations
-  freezed_annotation: ^3.1.0
-  json_annotation: ^4.9.0
+  # ============================================
+  freezed_annotation: ^3.1.0 # Annotations for Freezed data classes
+  json_annotation: ^4.9.0 # Annotations for JSON serialization
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  integration_test:
+    sdk: flutter
+  # ============================================
   # Testing
-  mocktail: ^1.0.4
-
+  # ============================================
+  mocktail: ^1.0.4 # Mocking library for Dart
+  faker: ^2.2.0  # Fake Data Generation
+  golden_toolkit: ^0.15.0 # Golden Tests (Screenshot comparison)
+  network_image_mock: ^2.1.1 # Network Image Mocking
+  # ============================================
   # Linting
-  custom_lint: ^0.8.1
-  riverpod_lint: ^3.0.3
-  flutter_lints: ^6.0.0
+  # ============================================
+  custom_lint: ^0.8.1 # Custom lint rules
+  riverpod_lint: ^3.0.3 # Lints for Riverpod
+  flutter_lints: ^6.0.0 # Recommended lints for Flutter
 
+  # ============================================
   # Code Generation
-  retrofit_generator: ^10.2.0
-  flutter_gen_runner: ^5.12.0
-  freezed: ^3.2.3
-  json_serializable: ^6.11.3
-  envied_generator: ^1.3.2
-  build_runner: ^2.10.4
+  # ============================================
+  retrofit_generator: ^10.2.0 # Generates Retrofit client code
+  flutter_gen_runner: ^5.12.0 # Generates asset classes
+  freezed: ^3.2.3 # Generates data classes
+  json_serializable: ^6.9.5 # Generates JSON serialization code
+  envied_generator: ^1.3.2 # Generates environment variable classes
+  objectbox_generator: ^5.0.3
+  build_runner: ^2.4.15 # Runs code generators
 
 flutter_gen:
   output: lib/core/gen/
@@ -85,3 +118,18 @@ flutter_gen:
 
 flutter:
   uses-material-design: true
+
+  # Assets
+  # Add your asset folders here, e.g., images, icons, etc.
+  # assets:
+  #   - assets/images/
+  #   - assets/icons/
+
+  # Fonts
+  # Add custom fonts here
+  # fonts:
+  #   - family: Roboto
+  #     fonts:
+  #       - asset: assets/fonts/Roboto-Regular.ttf
+  #       - asset: assets/fonts/Roboto-Bold.ttf
+  #         weight: 700

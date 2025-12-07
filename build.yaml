@@ -1,0 +1,17 @@
+targets:
+  $default:
+    builders:
+      freezed:
+        options:
+          format: true
+      json_serializable:
+        options:
+          explicit_to_json: true
+          include_if_null: false
+      
+global_options:
+  # ✅ Parallel builds
+  build_runner:
+    options:
+      enable_experiment:
+        - records
