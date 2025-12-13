@@ -1,4 +1,5 @@
 # 🧠 State Management Analysis
+
 ## Riverpod vs BLoC vs GetX vs Provider
 
 > **Decision:** ✅ `hooks_riverpod` (Manual)  
@@ -101,18 +102,20 @@
 ### ❌ Provider — Rejected
 
 **Pros:**
+
 - Simple API
 - Low learning curve
 - Good for small apps
 - Lightweight
 
 **Cons:**
+
 - Coupled to Widget Tree
 - Limited compile-time safety
 - Not scalable for Enterprise
 - Requires BuildContext everywhere
 
-**Verdict:** 
+**Verdict:**
 > مناسب پروژه‌های کوچک و ساده.  
 > برای Enterprise: **Not Recommended** ❌
 
@@ -121,12 +124,14 @@
 ### ❌ GetX — Rejected
 
 **Pros:**
+
 - All-in-one solution
 - Easy to start
 - Less boilerplate
 - Fast prototyping
 
 **Cons:**
+
 - Monolith Architecture (Anti-pattern)
 - Runtime errors instead of compile-time
 - Black box for debugging
@@ -143,6 +148,7 @@
 ### ⚠️ BLoC — Considered
 
 **Pros:**
+
 - Very powerful and mature
 - Excellent for complex flows
 - Great debugging tools
@@ -150,6 +156,7 @@
 - Strong community
 
 **Cons:**
+
 - Verbose and heavy boilerplate
 - Slows team velocity
 - Steep learning curve
@@ -164,6 +171,7 @@
 ### ✅ Riverpod — Selected
 
 **Pros:**
+
 - Compile-time safety (واقعی، نه شعاری)
 - No BuildContext dependency
 - Excellent testability
@@ -173,6 +181,7 @@
 - Same author as Provider (evolved version)
 
 **Cons:**
+
 - Slightly higher learning curve than Provider
 - Manual version requires more initial setup
 
@@ -185,6 +194,7 @@
 ## Why hooks_riverpod?
 
 ### Problem: StatefulWidget Boilerplate
+
 ```dart
 // ❌ Traditional - 35 lines for simple form
 class MyForm extends StatefulWidget {
@@ -223,8 +233,9 @@ super.dispose();
 }
 
 ### Solution: Flutter Hooks
+```
 
-dart
+```dart
 // ✅ With Hooks - 15 lines
 class MyForm extends HookConsumerWidget {
   @override
@@ -237,6 +248,7 @@ final emailFocus = useFocusNode();
 // ... build UI
   }
 }
+```
 
 ### Benefits Summary
 
@@ -271,8 +283,11 @@ final emailFocus = useFocusNode();
 
 ### ✅ Selected: `hooks_riverpod` (Manual)
 
-yaml
+```yaml
+
 # pubspec.yaml
 dependencies:
   flutter_riverpod: ^2.5.1
   hooks
+
+  ```
