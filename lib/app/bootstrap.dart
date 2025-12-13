@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:zero_setup_flutter/app/app.dart';
-import 'package:zero_setup_flutter/core/storage/storage_provider.dart';
-import 'package:zero_setup_flutter/core/storage/storage_service_impl.dart';
+import 'package:zero_setup_flutter/core/logger/logger_provider.dart';
 
 Future<void> bootstrap() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Storage
-  final storageService = StorageServiceImpl();
-  await storageService.init();
+  // final storageService = StorageServiceImpl();
+  // await storageService.init();
 
   // Initialize Talker
   final talker = TalkerFlutter.init();
@@ -22,8 +21,9 @@ Future<void> bootstrap() async {
 
   runApp(
     ProviderScope(
+      observers: [talkerRiverpodObserver],
       overrides: [
-        storageServiceProvider.overrideWithValue(storageService),
+        // storageServiceProvider.overrideWithValue(storageService),
         // talkerProvider.overrideWithValue(talker),
         // dioProvider.overrideWithValue(dio),
       ],
