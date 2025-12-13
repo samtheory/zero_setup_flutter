@@ -10,6 +10,6 @@ sealed class User with _$User {
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   /// Fake user برای تست
-  factory User.fake() =>
-      const User(id: 'fake-user-001', name: 'کاربر تستی', email: 'test@example.com', avatarUrl: null);
+  // ✅ حالا می‌تونی static method داشته باشی
+  static User fake() => const User(id: 'fake-user-001', name: 'کاربر تستی', email: 'test@example.com');
 }
