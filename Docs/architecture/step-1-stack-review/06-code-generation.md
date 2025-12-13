@@ -28,7 +28,7 @@
 |------|----------|--------|
 | **Freezed** | ✅ Use | Immutable models, unions, copyWith |
 | **json_serializable** | ✅ Use | JSON serialization (via Freezed) |
-| **ObjectBox Generator** | ✅ Use | Database entities |
+| **Isar Generator** | ✅ Use | Database entities |
 | **Retrofit Generator** | ✅ Use | API client generation |
 | **riverpod_generator** | ❌ Avoid | Unnecessary complexity |
 
@@ -51,7 +51,7 @@ Business Logic = Manual ✅
 | **Models/DTOs** | Freezed | ✅ Yes |
 | **JSON Parsing** | json_serializable | ✅ Yes |
 | **API Clients** | Retrofit | ✅ Yes |
-| **Database** | ObjectBox | ✅ Yes |
+| **Database** | Isar | ✅ Yes |
 | **Providers** | Manual | ❌ No |
 | **Business Logic** | Manual | ❌ No |
 

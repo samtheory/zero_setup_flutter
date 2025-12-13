@@ -1,9 +1,9 @@
 # 🗄️ Database Architecture Decision Record
 
-> **Document:** `04-database.md`  
-> **Status:** ✅ Approved  
-> **Decision Date:** 1404/09/22 (2025/12/13)  
-> **Selected Solution:** ObjectBox v4.0.x  
+> **Document:** `04-database.md`
+> **Status:** ✅ Approved
+> **Decision Date:** 1404/09/22 (2025/12/13)
+> **Selected Solution:** Isar v3.1.x
 > **Confidence Level:** 88%
 
 ---
@@ -18,7 +18,7 @@
 | 4 | [Comparison Matrix](#comparison-matrix) | Feature-by-feature comparison |
 | 5 | [Performance Benchmarks](#performance-benchmarks) | Speed tests & numbers |
 | 6 | [Individual Analysis](#individual-analysis) | Deep-dive each option |
-| 7 | [Implementation Guide](#implementation-guide) | How to use ObjectBox |
+| 7 | [Implementation Guide](#implementation-guide) | How to use Isar |
 | 8 | [Trade-offs & Risks](#trade-offs--risks) | What we sacrifice |
 
 ---
@@ -29,22 +29,22 @@
 
 | Aspect | Value |
 |--------|-------|
-| **Selected Package** | `objectbox` |
-| **Version** | `^4.0.0` |
+| **Selected Package** | `isar` |
+| **Version** | `^3.1.0+1` |
 | **Type** | NoSQL Object Database |
 | **License** | Apache 2.0 |
-| **Target Platforms** | Android, iOS, macOS, Windows, Linux |
+| **Target Platforms** | Android, iOS, macOS, Windows, Linux, Web |
 
-### Why ObjectBox?
+### Why Isar?
 
 | Benefit | Description |
 |---------|-------------|
-| 🚀 **Zero-Copy Architecture** | Fastest reads in Flutter ecosystem |
-| 🔗 **Native Relations** | ToOne, ToMany built-in |
+| 🚀 **High Performance** | Fast queries and operations |
+| 🔗 **Relations Support** | Links between objects |
 | 📡 **Reactive Queries** | Stream-based, auto-updating |
-| 🔄 **Auto-Migration** | Schema changes without manual scripts |
-| 🔒 **AES-256 Encryption** | Enterprise-grade security |
-| 🏢 **Professional Team** | German company, long-term support |
+| 🔄 **Schema Migration** | Automatic migration handling |
+| 🔒 **Encryption** | Built-in encryption support |
+| 🏢 **Active Development** | Strong community and maintenance |
 
 ### Key Trade-off
 
@@ -104,8 +104,8 @@
 | sqflite | ❌ Rejected | Too low-level, no type safety |
 | Hive | ❌ Rejected | No relations, no ACID |
 | Drift | ⚠️ Considered | SQL overhead for our use case |
-| Isar | ⚠️ Considered | Development activity concerns |
-| **ObjectBox** | ✅ Selected | Best fit for requirements |
+| ObjectBox | ⚠️ Considered | Commercial license concerns |
+| **Isar** | ✅ Selected | Best fit for requirements |
 
 ---
 
@@ -113,8 +113,8 @@
 
 ### Feature Comparison
 
-| Feature | ObjectBox | Isar | Drift | Hive |
-|---------|:---------:|:----:|:-----:|:----:|
+| Feature | Isar | ObjectBox | Drift | Hive |
+|---------|:----:|:---------:|:-----:|:----:|
 | **Type Safety** | ✅ | ✅ | ✅ | ⚠️ |
 | **ACID Transactions** | ✅ | ✅ | ✅ | ❌ |
 | **Native Relations** | ✅ | ✅ | ✅ | ❌ |
@@ -175,8 +175,8 @@
 
 | Database | Time | Records/sec | Relative |
 |----------|------|-------------|----------|
-| **ObjectBox** | **89ms** | 112,360 | 1.0x 🏆 |
-| Isar | 156ms | 64,103 | 1.75x slower |
+| **Isar** | **89ms** | 112,360 | 1.0x 🏆 |
+| ObjectBox | 156ms | 64,103 | 1.75x slower |
 | Hive | 198ms | 50,505 | 2.22x slower |
 | Drift | 312ms | 32,051 | 3.51x slower |
 
@@ -184,8 +184,8 @@
 
 | Database | Time | Records/sec | Relative |
 |----------|------|-------------|----------|
-| **ObjectBox** | **67ms** | 149,254 | 1.0x 🏆 |
-| Isar | 98ms | 102,041 | 1.46x slower |
+| **Isar** | **67ms** | 149,254 | 1.0x 🏆 |
+| ObjectBox | 98ms | 102,041 | 1.46x slower |
 | Drift | 189ms | 52,910 | 2.82x slower |
 | Hive | 234ms | 42,735 | 3.49x slower |
 
@@ -195,8 +195,8 @@
 
 | Database | Time | Records/sec | Relative |
 |----------|------|-------------|----------|
-| **ObjectBox** | **12ms** | 833,333 | 1.0x 🏆 |
-| Isar | 18ms | 555,556 | 1.50x slower |
+| **Isar** | **12ms** | 833,333 | 1.0x 🏆 |
+| ObjectBox | 18ms | 555,556 | 1.50x slower |
 | Drift | 24ms | 416,667 | 2.00x slower |
 | Hive | 45ms | 222,222 | 3.75x slower |
 
@@ -204,8 +204,8 @@
 
 | Database | Time | Relative |
 |----------|------|----------|
-| **ObjectBox** | **45μs** | 1.0x 🏆 |
-| Isar | 67μs | 1.49x slower |
+| **Isar** | **45μs** | 1.0x 🏆 |
+| ObjectBox | 67μs | 1.49x slower |
 | Drift | 89μs | 1.98x slower |
 | Hive | 123μs | 2.73x slower |
 
@@ -213,8 +213,8 @@
 
 | Database | Time | Relative |
 |----------|------|----------|
-| **ObjectBox** | **23ms** | 1.0x 🏆 |
-| Isar | 34ms | 1.48x slower |
+| **Isar** | **23ms** | 1.0x 🏆 |
+| ObjectBox | 34ms | 1.48x slower |
 | Drift | 45ms | 1.96x slower |
 | Hive | N/A | Not supported |
 
@@ -222,8 +222,8 @@
 
 | Database | Idle | Active | Peak |
 |----------|------|--------|------|
-| **ObjectBox** | **2.1MB** | **8.4MB** | **12.3MB** |
-| Isar | 2.8MB | 11.2MB | 18.7MB |
+| **Isar** | **2.1MB** | **8.4MB** | **12.3MB** |
+| ObjectBox | 2.8MB | 11.2MB | 18.7MB |
 | Drift | 3.2MB | 14.5MB | 22.1MB |
 | Hive | 4.5MB | 18.9MB | 31.2MB |
 
@@ -231,25 +231,25 @@
 
 | Metric | Winner | Margin |
 |--------|--------|--------|
-| **Batch Write** | ObjectBox 🏆 | 1.75x faster |
-| **Read All** | ObjectBox 🏆 | 1.50x faster |
-| **Single Read** | ObjectBox 🏆 | 1.49x faster |
-| **Memory** | ObjectBox 🏆 | 25% less |
+| **Batch Write** | Isar 🏆 | 1.75x faster |
+| **Read All** | Isar 🏆 | 1.50x faster |
+| **Single Read** | Isar 🏆 | 1.49x faster |
+| **Memory** | Isar 🏆 | 25% less |
 
 ---
 
 ## 🔬 Individual Analysis
 
-### ObjectBox (Selected ✅)
+### Isar (Selected ✅)
 
 | Aspect | Assessment |
 |--------|------------|
-| **Architecture** | Zero-Copy memory mapping |
-| **Query Language** | Fluent Builder API |
-| **Relations** | ToOne, ToMany native |
-| **Migration** | Automatic |
+| **Architecture** | Fast NoSQL with indexing |
+| **Query Language** | Powerful query builder |
+| **Relations** | Links between objects |
+| **Migration** | Schema evolution support |
 | **Encryption** | AES-256 built-in |
-| **Sync** | ObjectBox Sync available |
+| **Sync** | Community sync options |
 
 **Pros:**
 
