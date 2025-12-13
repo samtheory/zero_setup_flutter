@@ -25,11 +25,13 @@ dependencies:
   # ============================================
   # Database
   # ============================================
-  objectbox: ^5.0.3
-
+  drift: ^2.30.0
+  drift_flutter: ^0.2.8
+  
   # ============================================
   # Storage
   # ============================================
+
   shared_preferences: ^2.5.3 # Persistent key-value storage
   flutter_secure_storage: ^9.2.4 # Secure storage for sensitive data
 
@@ -88,7 +90,7 @@ dev_dependencies:
   # Testing
   # ============================================
   mocktail: ^1.0.4 # Mocking library for Dart
-  faker: ^2.2.0  # Fake Data Generation
+  faker: ^2.2.0 # Fake Data Generation
   golden_toolkit: ^0.15.0 # Golden Tests (Screenshot comparison)
   network_image_mock: ^2.1.1 # Network Image Mocking
   # ============================================
@@ -106,7 +108,7 @@ dev_dependencies:
   freezed: ^3.2.3 # Generates data classes
   json_serializable: ^6.9.5 # Generates JSON serialization code
   envied_generator: ^1.3.2 # Generates environment variable classes
-  objectbox_generator: ^5.0.3
+  drift_dev: ^2.30.0
   build_runner: ^2.4.15 # Runs code generators
 
 flutter_gen:
