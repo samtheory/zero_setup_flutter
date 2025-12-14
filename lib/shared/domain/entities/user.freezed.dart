@@ -145,8 +145,6 @@ extension UserPatterns on User {
     switch (_that) {
       case _User():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -224,8 +222,6 @@ extension UserPatterns on User {
     switch (_that) {
       case _User():
         return $default(_that.id, _that.name, _that.email, _that.avatarUrl);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
