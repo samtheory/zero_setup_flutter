@@ -9,4 +9,9 @@ abstract class Routes {
   static const home = '/home';
   static const profile = '/profile';
   static const settings = '/settings';
+
+  // Test Feature
+  static const testFeature = '/test-feature';
+  static const testFeatureDetail = '/test-feature/detail';
+  static const testFeatureForm = '/test-feature/form';
 }

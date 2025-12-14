@@ -77,9 +77,9 @@ dependencies:
   # ============================================
   # Logging
   # ============================================
-  talker_dio_logger: ^5.1.5 # Dio logger for Talker
-  talker_flutter: ^5.1.5 # Flutter integration for Talker
-  talker_riverpod_logger: ^5.1.5 # Riverpod logger for Talker
+  talker_dio_logger: ^5.1.7 # Dio logger for Talker
+  talker_flutter: ^5.1.7 # Flutter integration for Talker
+  talker_riverpod_logger: ^5.1.7 # Riverpod logger for Talker
 
   # ============================================
   # Code Generation Annotations

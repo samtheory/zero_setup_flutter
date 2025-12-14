@@ -24,6 +24,9 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/test_feature/presentation/screens/item_list_screen.dart';
+import '../../features/test_feature/presentation/screens/item_detail_screen.dart';
+import '../../features/test_feature/presentation/screens/item_form_screen.dart';
 import 'routes.dart';
 
 /// کلید Navigator برای refresh
@@ -64,6 +67,26 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.login,
         builder: (context, state) => const LoginScreen(),
+      ),
+
+      // 🧪 Test Feature Routes (بدون Shell برای نمایش مستقل)
+      GoRoute(
+        path: Routes.testFeature,
+        builder: (context, state) => const ItemListScreen(),
+      ),
+      GoRoute(
+        path: '${Routes.testFeatureDetail}/:id',
+        builder: (context, state) {
+          final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
+          return ItemDetailScreen(itemId: id);
+        },
+      ),
+      GoRoute(
+        path: Routes.testFeatureForm,
+        builder: (context, state) {
+          final id = int.tryParse(state.uri.queryParameters['id'] ?? '');
+          return ItemFormScreen(itemId: id);
+        },
       ),
       
       // 🏠 Main Shell با Bottom Navigation
