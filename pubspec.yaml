@@ -100,6 +100,10 @@ dev_dependencies:
   golden_toolkit: ^0.15.0 # Golden Tests (Screenshot comparison)
   network_image_mock: ^2.1.1 # Network Image Mocking
   # ============================================
+  # E2E
+  # ============================================
+  patrol: ^4.0.1
+  # ============================================
   # Linting
   # ============================================
   custom_lint: ^0.8.1 # Custom lint rules
