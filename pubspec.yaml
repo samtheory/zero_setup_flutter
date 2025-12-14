@@ -27,7 +27,7 @@ dependencies:
   # ============================================
   drift: ^2.30.0
   drift_flutter: ^0.2.8
-  
+
   # ============================================
   # Storage
   # ============================================
@@ -68,6 +68,12 @@ dependencies:
   toastification: ^3.0.3 # Toast notifications
   intl: ^0.20.2 # Internationalization
   shamsi_date: ^1.1.1 # Jalali date support
+  
+  # ============================================
+  # validating data in Flutter
+  # ============================================
+  acanthis: ^1.5.0 # Schema validation and serialization
+
   # ============================================
   # Logging
   # ============================================
