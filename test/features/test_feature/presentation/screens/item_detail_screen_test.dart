@@ -15,8 +15,7 @@ import 'package:zero_setup_flutter/core/storage/preferences_service.dart';
 class MockPreferencesService extends Mock implements PreferencesService {}
 
 // Test notifier for mocking state
-class TestItemDetailNotifier extends StateNotifier<ItemDetailState>
-    implements ItemDetailNotifier {
+class TestItemDetailNotifier extends StateNotifier<ItemDetailState> implements ItemDetailNotifier {
   TestItemDetailNotifier(super.state);
 
   @override
@@ -56,10 +55,7 @@ void main() {
     when(() => mockPrefs.setLastViewedItemId(any())).thenAnswer((_) async {});
   });
 
-  Widget createTestWidget({
-    ItemDetailState? initialState,
-    int itemId = 1,
-  }) {
+  Widget createTestWidget({ItemDetailState? initialState, int itemId = 1}) {
     if (initialState != null) {
       testNotifier = TestItemDetailNotifier(initialState);
     }
@@ -69,36 +65,21 @@ void main() {
         itemDetailProvider.overrideWith((ref) => testNotifier),
         preferencesServiceProvider.overrideWithValue(mockPrefs),
       ],
-      child: MaterialApp(
-        home: ItemDetailScreen(itemId: itemId),
-      ),
+      child: MaterialApp(home: ItemDetailScreen(itemId: itemId)),
     );
   }
 
   group('ItemDetailScreen', () {
     testWidgets('shows loading indicator when loading', (tester) async {
-      await tester.pumpWidget(
-        createTestWidget(
-          initialState: const ItemDetailState(isLoading: true),
-        ),
-      );
+      await tester.pumpWidget(createTestWidget(initialState: const ItemDetailState(isLoading: true)));
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
     testWidgets('shows item details when loaded', (tester) async {
-      final item = const ItemModel(
-        id: 1,
-        title: 'Test Item',
-        description: 'Test Description',
-        isCompleted: false,
-      );
+      final item = const ItemModel(id: 1, title: 'Test Item', description: 'Test Description', isCompleted: false);
 
-      await tester.pumpWidget(
-        createTestWidget(
-          initialState: ItemDetailState(item: item),
-        ),
-      );
+      await tester.pumpWidget(createTestWidget(initialState: ItemDetailState(item: item)));
       await tester.pumpAndSettle();
 
       expect(find.text('Test Item'), findsWidgets);
@@ -106,13 +87,7 @@ void main() {
     });
 
     testWidgets('shows error state with retry button', (tester) async {
-      await tester.pumpWidget(
-        createTestWidget(
-          initialState: const ItemDetailState(
-            error: 'خطا در بارگذاری',
-          ),
-        ),
-      );
+      await tester.pumpWidget(createTestWidget(initialState: const ItemDetailState(error: 'خطا در بارگذاری')));
       await tester.pumpAndSettle();
 
       expect(find.byIcon(Icons.error_outline), findsOneWidget);
@@ -121,11 +96,7 @@ void main() {
     });
 
     testWidgets('shows not found state when item is null', (tester) async {
-      await tester.pumpWidget(
-        createTestWidget(
-          initialState: const ItemDetailState(item: null),
-        ),
-      );
+      await tester.pumpWidget(createTestWidget(initialState: const ItemDetailState(item: null)));
       await tester.pumpAndSettle();
 
       expect(find.byIcon(Icons.search_off), findsOneWidget);
@@ -133,70 +104,36 @@ void main() {
     });
 
     testWidgets('has edit button in app bar', (tester) async {
-      final item = const ItemModel(
-        id: 1,
-        title: 'Test',
-        description: 'Desc',
-      );
+      final item = const ItemModel(id: 1, title: 'Test', description: 'Desc');
 
-      await tester.pumpWidget(
-        createTestWidget(
-          initialState: ItemDetailState(item: item),
-        ),
-      );
+      await tester.pumpWidget(createTestWidget(initialState: ItemDetailState(item: item)));
       await tester.pumpAndSettle();
 
       expect(find.byIcon(Icons.edit), findsOneWidget);
     });
 
     testWidgets('has delete button in app bar', (tester) async {
-      final item = const ItemModel(
-        id: 1,
-        title: 'Test',
-        description: 'Desc',
-      );
+      final item = const ItemModel(id: 1, title: 'Test', description: 'Desc');
 
-      await tester.pumpWidget(
-        createTestWidget(
-          initialState: ItemDetailState(item: item),
-        ),
-      );
+      await tester.pumpWidget(createTestWidget(initialState: ItemDetailState(item: item)));
       await tester.pumpAndSettle();
 
       expect(find.byIcon(Icons.delete), findsOneWidget);
     });
 
     testWidgets('shows completion status', (tester) async {
-      final completedItem = const ItemModel(
-        id: 1,
-        title: 'Completed Item',
-        description: 'Desc',
-        isCompleted: true,
-      );
+      final completedItem = const ItemModel(id: 1, title: 'Completed Item', description: 'Desc', isCompleted: true);
 
-      await tester.pumpWidget(
-        createTestWidget(
-          initialState: ItemDetailState(item: completedItem),
-        ),
-      );
+      await tester.pumpWidget(createTestWidget(initialState: ItemDetailState(item: completedItem)));
       await tester.pumpAndSettle();
 
       expect(find.text('تکمیل شده'), findsOneWidget);
     });
 
     testWidgets('shows pending status for incomplete item', (tester) async {
-      final incompleteItem = const ItemModel(
-        id: 1,
-        title: 'Incomplete Item',
-        description: 'Desc',
-        isCompleted: false,
-      );
+      final incompleteItem = const ItemModel(id: 1, title: 'Incomplete Item', description: 'Desc', isCompleted: false);
 
-      await tester.pumpWidget(
-        createTestWidget(
-          initialState: ItemDetailState(item: incompleteItem),
-        ),
-      );
+      await tester.pumpWidget(createTestWidget(initialState: ItemDetailState(item: incompleteItem)));
       await tester.pumpAndSettle();
 
       expect(find.text('در انتظار'), findsOneWidget);

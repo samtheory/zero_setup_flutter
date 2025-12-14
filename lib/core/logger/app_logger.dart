@@ -8,18 +8,12 @@ final talker = TalkerFlutter.init(
     maxHistoryItems: 500,
     useConsoleLogs: kDebugMode,
   ),
-  logger: TalkerLogger(
-    output: debugPrint,
-    settings: TalkerLoggerSettings(
-      enableColors: true,
-      maxLineWidth: 120,
-    ),
-  ),
+  logger: TalkerLogger(output: debugPrint, settings: TalkerLoggerSettings(enableColors: true, maxLineWidth: 120)),
 );
 
 /// Custom log type for success messages (green colored)
 class GoodLog extends TalkerLog {
-  GoodLog(String message) : super(message);
+  GoodLog(String super.message);
 
   @override
   String get title => 'good';

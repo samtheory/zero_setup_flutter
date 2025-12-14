@@ -40,8 +40,7 @@ class ItemListScreen extends HookConsumerWidget {
     // Pagination scroll listener
     useEffect(() {
       void onScroll() {
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 200) {
+        if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200) {
           ref.read(itemListProvider.notifier).loadMore();
         }
       }
@@ -60,12 +59,7 @@ class ItemListScreen extends HookConsumerWidget {
             tooltip: 'مشاهده لاگ‌ها',
             onPressed: () {
               talker.info('🐛 Opening debug logs screen');
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => TalkerScreen(talker: talker),
-                ),
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (_) => TalkerScreen(talker: talker)));
             },
           ),
           // Refresh
@@ -98,9 +92,7 @@ class ItemListScreen extends HookConsumerWidget {
                         },
                       )
                     : null,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               ),
               onSubmitted: (value) {
                 talker.info('🔍 Search submitted: "$value"');
@@ -110,9 +102,7 @@ class ItemListScreen extends HookConsumerWidget {
           ),
 
           // Items list
-          Expanded(
-            child: _buildBody(context, ref, state, scrollController),
-          ),
+          Expanded(child: _buildBody(context, ref, state, scrollController)),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -126,12 +116,7 @@ class ItemListScreen extends HookConsumerWidget {
     );
   }
 
-  Widget _buildBody(
-    BuildContext context,
-    WidgetRef ref,
-    ItemListState state,
-    ScrollController scrollController,
-  ) {
+  Widget _buildBody(BuildContext context, WidgetRef ref, ItemListState state, ScrollController scrollController) {
     // Loading state (initial load)
     if (state.isLoading && state.items.isEmpty) {
       return ListView.builder(
@@ -181,16 +166,11 @@ class ItemListScreen extends HookConsumerWidget {
             children: [
               Icon(Icons.inbox_outlined, size: 64, color: Colors.grey.shade400),
               const SizedBox(height: 16),
-              Text(
-                'آیتمی یافت نشد',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+              Text('آیتمی یافت نشد', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               Text(
                 'برای شروع یک آیتم جدید ایجاد کنید',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey,
-                    ),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
               ),
               const SizedBox(height: 24),
               ElevatedButton.icon(
@@ -276,10 +256,7 @@ class ItemListScreen extends HookConsumerWidget {
                 );
               }
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
             child: const Text('حذف'),
           ),
         ],

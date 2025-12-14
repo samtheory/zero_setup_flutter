@@ -18,8 +18,7 @@ class MockItemRepository extends Mock implements ItemRepository {}
 class MockPreferencesService extends Mock implements PreferencesService {}
 
 // Mock notifier for testing
-class TestItemListNotifier extends StateNotifier<ItemListState>
-    implements ItemListNotifier {
+class TestItemListNotifier extends StateNotifier<ItemListState> implements ItemListNotifier {
   TestItemListNotifier(super.state);
 
   @override
@@ -57,23 +56,14 @@ void main() {
     }
 
     return ProviderScope(
-      overrides: [
-        itemListProvider.overrideWith((ref) => testNotifier),
-      ],
-      child: MaterialApp(
-        home: const ItemListScreen(),
-      ),
+      overrides: [itemListProvider.overrideWith((ref) => testNotifier)],
+      child: MaterialApp(home: const ItemListScreen()),
     );
   }
 
   group('ItemListScreen', () {
-    testWidgets('shows loading shimmer when loading with empty items',
-        (tester) async {
-      await tester.pumpWidget(
-        createTestWidget(
-          initialState: const ItemListState(isLoading: true, items: []),
-        ),
-      );
+    testWidgets('shows loading shimmer when loading with empty items', (tester) async {
+      await tester.pumpWidget(createTestWidget(initialState: const ItemListState(isLoading: true, items: [])));
 
       expect(find.byType(ItemCardShimmer), findsWidgets);
     });
@@ -84,11 +74,7 @@ void main() {
         const ItemModel(id: 2, title: 'Item 2', description: 'Description 2'),
       ];
 
-      await tester.pumpWidget(
-        createTestWidget(
-          initialState: ItemListState(items: items),
-        ),
-      );
+      await tester.pumpWidget(createTestWidget(initialState: ItemListState(items: items)));
       await tester.pumpAndSettle();
 
       expect(find.text('Item 1'), findsOneWidget);
@@ -98,10 +84,7 @@ void main() {
     testWidgets('shows error state with retry button', (tester) async {
       await tester.pumpWidget(
         createTestWidget(
-          initialState: const ItemListState(
-            error: 'خطا در اتصال',
-            items: [],
-          ),
+          initialState: const ItemListState(error: 'خطا در اتصال', items: []),
         ),
       );
       await tester.pumpAndSettle();
@@ -112,11 +95,7 @@ void main() {
     });
 
     testWidgets('shows empty state when no items', (tester) async {
-      await tester.pumpWidget(
-        createTestWidget(
-          initialState: const ItemListState(items: []),
-        ),
-      );
+      await tester.pumpWidget(createTestWidget(initialState: const ItemListState(items: [])));
       await tester.pumpAndSettle();
 
       expect(find.byIcon(Icons.inbox_outlined), findsOneWidget);

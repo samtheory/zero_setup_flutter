@@ -18,7 +18,7 @@ class ItemFormSchema {
   static const int titleMinLength = 3;
   static const int titleMaxLength = 100;
 
-  /// Description validation constraints  
+  /// Description validation constraints
   static const int descriptionMinLength = 10;
   static const int descriptionMaxLength = 500;
 
@@ -61,10 +61,10 @@ class ItemFormSchema {
   }) {
     final titleResult = validateTitle(title);
     final descriptionResult = validateDescription(description);
-    
+
     titleError.value = titleResult;
     descriptionError.value = descriptionResult;
-    
+
     return titleResult == null && descriptionResult == null;
   }
 }
@@ -138,12 +138,9 @@ class ItemFormScreen extends HookConsumerWidget {
     useEffect(() {
       if (state.successMessage != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.successMessage!),
-              backgroundColor: Colors.green,
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.successMessage!), backgroundColor: Colors.green));
           ref.read(itemDetailProvider.notifier).clearSuccessMessage();
         });
       }
@@ -151,9 +148,7 @@ class ItemFormScreen extends HookConsumerWidget {
     }, [state.successMessage]);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(isEditing ? 'ویرایش آیتم' : 'ایجاد آیتم جدید'),
-      ),
+      appBar: AppBar(title: Text(isEditing ? 'ویرایش آیتم' : 'ایجاد آیتم جدید')),
       body: state.isLoading && isEditing
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -240,10 +235,7 @@ class ItemFormScreen extends HookConsumerWidget {
                             Icon(Icons.error, color: Colors.red.shade700),
                             const SizedBox(width: 12),
                             Expanded(
-                              child: Text(
-                                state.error!,
-                                style: TextStyle(color: Colors.red.shade700),
-                              ),
+                              child: Text(state.error!, style: TextStyle(color: Colors.red.shade700)),
                             ),
                             IconButton(
                               icon: const Icon(Icons.close),
@@ -262,9 +254,7 @@ class ItemFormScreen extends HookConsumerWidget {
                           child: Text(
                             'عنوان: ${titleController.text.length}/100',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: titleController.text.length > 100
-                                  ? Colors.red
-                                  : Colors.grey,
+                              color: titleController.text.length > 100 ? Colors.red : Colors.grey,
                             ),
                           ),
                         ),
@@ -272,9 +262,7 @@ class ItemFormScreen extends HookConsumerWidget {
                           child: Text(
                             'توضیحات: ${descriptionController.text.length}/500',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: descriptionController.text.length > 500
-                                  ? Colors.red
-                                  : Colors.grey,
+                              color: descriptionController.text.length > 500 ? Colors.red : Colors.grey,
                             ),
                             textAlign: TextAlign.end,
                           ),
@@ -290,23 +278,20 @@ class ItemFormScreen extends HookConsumerWidget {
                         onPressed: state.isSaving
                             ? null
                             : () => _handleSubmit(
-                                  context,
-                                  ref,
-                                  titleController.text,
-                                  descriptionController.text,
-                                  isCompletedState.value,
-                                  titleError,
-                                  descriptionError,
-                                  hasSubmitted,
-                                ),
+                                context,
+                                ref,
+                                titleController.text,
+                                descriptionController.text,
+                                isCompletedState.value,
+                                titleError,
+                                descriptionError,
+                                hasSubmitted,
+                              ),
                         child: state.isSaving
                             ? const SizedBox(
                                 height: 24,
                                 width: 24,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
+                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                               )
                             : Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -364,11 +349,7 @@ class ItemFormScreen extends HookConsumerWidget {
     talker.info('📝 Form validation passed');
 
     // Create request
-    final request = ItemRequest(
-      title: title.trim(),
-      description: description.trim(),
-      isCompleted: isCompleted,
-    );
+    final request = ItemRequest(title: title.trim(), description: description.trim(), isCompleted: isCompleted);
 
     final notifier = ref.read(itemDetailProvider.notifier);
     ItemModel? result;
@@ -386,5 +367,4 @@ class ItemFormScreen extends HookConsumerWidget {
       context.pop(); // Navigate back
     }
   }
-
 }

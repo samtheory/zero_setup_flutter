@@ -74,12 +74,7 @@ class ItemDetailScreen extends HookConsumerWidget {
     );
   }
 
-  Widget _buildBody(
-    BuildContext context,
-    WidgetRef ref,
-    ItemDetailState state,
-    ThemeData theme,
-  ) {
+  Widget _buildBody(BuildContext context, WidgetRef ref, ItemDetailState state, ThemeData theme) {
     // Loading state
     if (state.isLoading) {
       return const Center(child: CircularProgressIndicator());
@@ -148,21 +143,14 @@ class ItemDetailScreen extends HookConsumerWidget {
                   color: item.isCompleted ? Colors.green : Colors.orange,
                 ),
               ),
-              title: Text(
-                item.isCompleted ? 'تکمیل شده' : 'در انتظار',
-                style: theme.textTheme.titleMedium,
-              ),
+              title: Text(item.isCompleted ? 'تکمیل شده' : 'در انتظار', style: theme.textTheme.titleMedium),
               subtitle: const Text('وضعیت'),
               trailing: Switch(
                 value: item.isCompleted,
                 onChanged: (value) async {
                   talker.info('🔄 Toggling completion status: $value');
                   // Update item with new status
-                  final request = ItemRequest(
-                    title: item.title,
-                    description: item.description,
-                    isCompleted: value,
-                  );
+                  final request = ItemRequest(title: item.title, description: item.description, isCompleted: value);
                   await ref.read(itemDetailProvider.notifier).updateItem(itemId, request);
                 },
               ),
@@ -188,12 +176,7 @@ class ItemDetailScreen extends HookConsumerWidget {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  _buildMetadataRow(
-                    context,
-                    icon: Icons.tag,
-                    label: 'شناسه',
-                    value: '#${item.id}',
-                  ),
+                  _buildMetadataRow(context, icon: Icons.tag, label: 'شناسه', value: '#${item.id}'),
                   const Divider(),
                   if (item.createdAt != null)
                     _buildMetadataRow(
@@ -234,10 +217,7 @@ class ItemDetailScreen extends HookConsumerWidget {
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: () => _showDeleteDialog(context, ref),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                  ),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
                   icon: const Icon(Icons.delete),
                   label: const Text('حذف'),
                 ),
@@ -284,10 +264,7 @@ class ItemDetailScreen extends HookConsumerWidget {
         title: const Text('حذف آیتم'),
         content: Text('آیا از حذف "${item.title}" مطمئن هستید؟'),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('انصراف'),
-          ),
+          TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('انصراف')),
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(dialogContext);
@@ -296,27 +273,18 @@ class ItemDetailScreen extends HookConsumerWidget {
 
               if (context.mounted) {
                 if (success) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('آیتم حذف شد'),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(const SnackBar(content: Text('آیتم حذف شد'), backgroundColor: Colors.green));
                   context.pop(); // Go back to list
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('خطا در حذف آیتم'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(const SnackBar(content: Text('خطا در حذف آیتم'), backgroundColor: Colors.red));
                 }
               }
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
             child: const Text('حذف'),
           ),
         ],

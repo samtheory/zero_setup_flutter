@@ -52,24 +52,12 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
 
     talker.info('🔄 Loading items (refresh: $refresh)');
 
-    state = state.copyWith(
-      isLoading: true,
-      error: null,
-      currentPage: refresh ? 1 : state.currentPage,
-    );
+    state = state.copyWith(isLoading: true, error: null, currentPage: refresh ? 1 : state.currentPage);
 
     try {
-      final items = await _repository.getItems(
-        page: state.currentPage,
-        limit: 20,
-        search: state.searchQuery,
-      );
+      final items = await _repository.getItems(page: state.currentPage, limit: 20, search: state.searchQuery);
 
-      state = state.copyWith(
-        items: items,
-        isLoading: false,
-        hasMore: items.length >= 20,
-      );
+      state = state.copyWith(items: items, isLoading: false, hasMore: items.length >= 20);
 
       // Example: Save last fetch time to preferences
       await _preferences.setLastFetchTime(DateTime.now());
@@ -77,10 +65,7 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
       talker.good('✅ Items loaded: ${items.length}');
     } catch (e) {
       final errorMessage = _getErrorMessage(e);
-      state = state.copyWith(
-        isLoading: false,
-        error: errorMessage,
-      );
+      state = state.copyWith(isLoading: false, error: errorMessage);
       talker.error('❌ Failed to load items: $errorMessage', e);
     }
   }
@@ -95,11 +80,7 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
 
     try {
       final nextPage = state.currentPage + 1;
-      final items = await _repository.getItems(
-        page: nextPage,
-        limit: 20,
-        search: state.searchQuery,
-      );
+      final items = await _repository.getItems(page: nextPage, limit: 20, search: state.searchQuery);
 
       state = state.copyWith(
         items: [...state.items, ...items],
@@ -110,10 +91,7 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
 
       talker.good('✅ Loaded ${items.length} more items');
     } catch (e) {
-      state = state.copyWith(
-        isLoadingMore: false,
-        error: _getErrorMessage(e),
-      );
+      state = state.copyWith(isLoadingMore: false, error: _getErrorMessage(e));
       talker.error('❌ Failed to load more items', e);
     }
   }
@@ -122,10 +100,7 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
   Future<void> searchItems(String query) async {
     talker.info('🔍 Searching items: "$query"');
 
-    state = state.copyWith(
-      searchQuery: query.isEmpty ? null : query,
-      currentPage: 1,
-    );
+    state = state.copyWith(searchQuery: query.isEmpty ? null : query, currentPage: 1);
 
     await loadItems(refresh: true);
   }
@@ -136,9 +111,7 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
 
     try {
       await _repository.deleteItem(id);
-      state = state.copyWith(
-        items: state.items.where((item) => item.id != id).toList(),
-      );
+      state = state.copyWith(items: state.items.where((item) => item.id != id).toList());
       talker.good('✅ Item deleted from list: $id');
       return true;
     } catch (e) {
@@ -207,10 +180,7 @@ class ItemDetailNotifier extends StateNotifier<ItemDetailState> {
       state = state.copyWith(item: item, isLoading: false);
       talker.good('✅ Item loaded: ${item.title}');
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: _getErrorMessage(e),
-      );
+      state = state.copyWith(isLoading: false, error: _getErrorMessage(e));
       talker.error('❌ Failed to load item', e);
     }
   }
@@ -223,11 +193,7 @@ class ItemDetailNotifier extends StateNotifier<ItemDetailState> {
 
     try {
       final item = await _repository.createItem(request);
-      state = state.copyWith(
-        item: item,
-        isSaving: false,
-        successMessage: 'آیتم با موفقیت ایجاد شد',
-      );
+      state = state.copyWith(item: item, isSaving: false, successMessage: 'آیتم با موفقیت ایجاد شد');
 
       // Update list provider
       _ref.read(itemListProvider.notifier).addItem(item);
@@ -235,10 +201,7 @@ class ItemDetailNotifier extends StateNotifier<ItemDetailState> {
       talker.good('✅ Item created: ${item.id}');
       return item;
     } catch (e) {
-      state = state.copyWith(
-        isSaving: false,
-        error: _getErrorMessage(e),
-      );
+      state = state.copyWith(isSaving: false, error: _getErrorMessage(e));
       talker.error('❌ Failed to create item', e);
       return null;
     }
@@ -252,11 +215,7 @@ class ItemDetailNotifier extends StateNotifier<ItemDetailState> {
 
     try {
       final item = await _repository.updateItem(id, request);
-      state = state.copyWith(
-        item: item,
-        isSaving: false,
-        successMessage: 'آیتم با موفقیت به‌روزرسانی شد',
-      );
+      state = state.copyWith(item: item, isSaving: false, successMessage: 'آیتم با موفقیت به‌روزرسانی شد');
 
       // Update list provider
       _ref.read(itemListProvider.notifier).updateItemInList(item);
@@ -264,10 +223,7 @@ class ItemDetailNotifier extends StateNotifier<ItemDetailState> {
       talker.good('✅ Item updated: ${item.id}');
       return item;
     } catch (e) {
-      state = state.copyWith(
-        isSaving: false,
-        error: _getErrorMessage(e),
-      );
+      state = state.copyWith(isSaving: false, error: _getErrorMessage(e));
       talker.error('❌ Failed to update item', e);
       return null;
     }
@@ -281,10 +237,7 @@ class ItemDetailNotifier extends StateNotifier<ItemDetailState> {
 
     try {
       await _repository.deleteItem(id);
-      state = state.copyWith(
-        isDeleting: false,
-        successMessage: 'آیتم با موفقیت حذف شد',
-      );
+      state = state.copyWith(isDeleting: false, successMessage: 'آیتم با موفقیت حذف شد');
 
       // Update list provider
       _ref.read(itemListProvider.notifier).deleteItem(id);
@@ -292,10 +245,7 @@ class ItemDetailNotifier extends StateNotifier<ItemDetailState> {
       talker.good('✅ Item deleted: $id');
       return true;
     } catch (e) {
-      state = state.copyWith(
-        isDeleting: false,
-        error: _getErrorMessage(e),
-      );
+      state = state.copyWith(isDeleting: false, error: _getErrorMessage(e));
       talker.error('❌ Failed to delete item', e);
       return false;
     }

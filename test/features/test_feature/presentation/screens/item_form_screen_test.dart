@@ -11,8 +11,7 @@ import 'package:zero_setup_flutter/features/test_feature/presentation/screens/it
 
 // Mocks
 // Test notifier for mocking state
-class TestItemDetailNotifier extends StateNotifier<ItemDetailState>
-    implements ItemDetailNotifier {
+class TestItemDetailNotifier extends StateNotifier<ItemDetailState> implements ItemDetailNotifier {
   TestItemDetailNotifier(super.state);
 
   @override
@@ -47,21 +46,14 @@ void main() {
     testNotifier = TestItemDetailNotifier(const ItemDetailState());
   });
 
-  Widget createTestWidget({
-    ItemDetailState? initialState,
-    int? itemId,
-  }) {
+  Widget createTestWidget({ItemDetailState? initialState, int? itemId}) {
     if (initialState != null) {
       testNotifier = TestItemDetailNotifier(initialState);
     }
 
     return ProviderScope(
-      overrides: [
-        itemDetailProvider.overrideWith((ref) => testNotifier),
-      ],
-      child: MaterialApp(
-        home: ItemFormScreen(itemId: itemId),
-      ),
+      overrides: [itemDetailProvider.overrideWith((ref) => testNotifier)],
+      child: MaterialApp(home: ItemFormScreen(itemId: itemId)),
     );
   }
 
@@ -121,12 +113,7 @@ void main() {
       });
 
       testWidgets('shows loading indicator while loading item', (tester) async {
-        await tester.pumpWidget(
-          createTestWidget(
-            itemId: 1,
-            initialState: const ItemDetailState(isLoading: true),
-          ),
-        );
+        await tester.pumpWidget(createTestWidget(itemId: 1, initialState: const ItemDetailState(isLoading: true)));
 
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
       });
@@ -139,12 +126,7 @@ void main() {
           isCompleted: true,
         );
 
-        await tester.pumpWidget(
-          createTestWidget(
-            itemId: 1,
-            initialState: ItemDetailState(item: item),
-          ),
-        );
+        await tester.pumpWidget(createTestWidget(itemId: 1, initialState: ItemDetailState(item: item)));
         await tester.pumpAndSettle();
 
         expect(find.text('Existing Title'), findsOneWidget);
@@ -152,18 +134,9 @@ void main() {
       });
 
       testWidgets('shows update button in edit mode', (tester) async {
-        final item = const ItemModel(
-          id: 1,
-          title: 'Test',
-          description: 'Test Description',
-        );
+        final item = const ItemModel(id: 1, title: 'Test', description: 'Test Description');
 
-        await tester.pumpWidget(
-          createTestWidget(
-            itemId: 1,
-            initialState: ItemDetailState(item: item),
-          ),
-        );
+        await tester.pumpWidget(createTestWidget(itemId: 1, initialState: ItemDetailState(item: item)));
         await tester.pumpAndSettle();
 
         expect(find.text('ذخیره تغییرات'), findsOneWidget);
@@ -196,10 +169,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Should show validation error
-        expect(
-          find.text('عنوان باید حداقل ۳ کاراکتر باشد'),
-          findsOneWidget,
-        );
+        expect(find.text('عنوان باید حداقل ۳ کاراکتر باشد'), findsOneWidget);
       });
 
       testWidgets('validates empty description', (tester) async {
@@ -235,10 +205,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Should show validation error
-        expect(
-          find.text('توضیحات باید حداقل ۱۰ کاراکتر باشد'),
-          findsOneWidget,
-        );
+        expect(find.text('توضیحات باید حداقل ۱۰ کاراکتر باشد'), findsOneWidget);
       });
     });
 
@@ -258,8 +225,7 @@ void main() {
         final checkbox = find.byType(CheckboxListTile);
 
         // Initially unchecked
-        CheckboxListTile checkboxWidget =
-            tester.widget<CheckboxListTile>(checkbox);
+        CheckboxListTile checkboxWidget = tester.widget<CheckboxListTile>(checkbox);
         expect(checkboxWidget.value, isFalse);
 
         // Toggle
@@ -295,9 +261,7 @@ void main() {
     });
 
     test('validates valid description', () {
-      final result = ItemFormSchema.validateDescription(
-        'This is a valid description with enough characters',
-      );
+      final result = ItemFormSchema.validateDescription('This is a valid description with enough characters');
       expect(result, isNull);
     });
 

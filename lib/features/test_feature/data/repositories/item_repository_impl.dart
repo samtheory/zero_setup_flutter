@@ -11,18 +11,10 @@ class ItemRepositoryImpl implements ItemRepository {
   ItemRepositoryImpl(this._apiService);
 
   @override
-  Future<List<ItemModel>> getItems({
-    int? page,
-    int? limit,
-    String? search,
-  }) async {
+  Future<List<ItemModel>> getItems({int? page, int? limit, String? search}) async {
     try {
       talker.info('📥 Fetching items: page=$page, limit=$limit, search=$search');
-      final items = await _apiService.getItems(
-        page: page,
-        limit: limit,
-        search: search,
-      );
+      final items = await _apiService.getItems(page: page, limit: limit, search: search);
       talker.good('✅ Fetched ${items.length} items');
       return items;
     } catch (e, st) {
