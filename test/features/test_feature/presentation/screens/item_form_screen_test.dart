@@ -87,7 +87,8 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('ایجاد آیتم'), findsOneWidget);
-        expect(find.byIcon(Icons.check), findsOneWidget);
+        // In create mode, icon is Icons.add (not Icons.check)
+        expect(find.byIcon(Icons.add), findsWidgets);
       });
 
       testWidgets('has form fields that accept input', (tester) async {

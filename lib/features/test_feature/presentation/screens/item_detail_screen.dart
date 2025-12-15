@@ -27,13 +27,16 @@ class ItemDetailScreen extends HookConsumerWidget {
     final state = ref.watch(itemDetailProvider);
     final theme = Theme.of(context);
 
+    // Capture notifier reference before effect for safe disposal
+    final notifier = ref.read(itemDetailProvider.notifier);
+
     // Load item on mount
     useEffect(() {
       talker.info('📄 ItemDetailScreen mounted for item: $itemId');
 
       // Load the item
       Future.microtask(() {
-        ref.read(itemDetailProvider.notifier).loadItem(itemId);
+        notifier.loadItem(itemId);
       });
 
       // Save last viewed item to preferences
@@ -42,8 +45,8 @@ class ItemDetailScreen extends HookConsumerWidget {
 
       return () {
         talker.info('📄 ItemDetailScreen disposed');
-        // Clear state when leaving
-        ref.read(itemDetailProvider.notifier).clear();
+        // Clear state when leaving - use captured notifier to avoid ref access during dispose
+        notifier.clear();
       };
     }, [itemId]);
 

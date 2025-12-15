@@ -115,7 +115,8 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(FloatingActionButton), findsOneWidget);
-      expect(find.byIcon(Icons.add), findsOneWidget);
+      // Icons.add can appear multiple times (FAB + empty state), so just check FAB exists
+      expect(find.descendant(of: find.byType(FloatingActionButton), matching: find.byIcon(Icons.add)), findsOneWidget);
       expect(find.text('آیتم جدید'), findsOneWidget);
     });
 

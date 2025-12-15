@@ -51,8 +51,8 @@ void main() {
     testNotifier = TestItemDetailNotifier(const ItemDetailState());
     mockPrefs = MockPreferencesService();
 
-    // Stub preferences methods
-    when(() => mockPrefs.setLastViewedItemId(any())).thenAnswer((_) async {});
+    // Stub preferences methods - setInt is used by setLastViewedItemId
+    when(() => mockPrefs.setInt(any(), any())).thenAnswer((_) async {});
   });
 
   Widget createTestWidget({ItemDetailState? initialState, int itemId = 1}) {
@@ -109,7 +109,12 @@ void main() {
       await tester.pumpWidget(createTestWidget(initialState: ItemDetailState(item: item)));
       await tester.pumpAndSettle();
 
-      expect(find.byIcon(Icons.edit), findsOneWidget);
+      // There are 2 edit buttons - one in AppBar and one in body action row
+      expect(find.byIcon(Icons.edit), findsNWidgets(2));
+
+      // Verify edit button in AppBar specifically
+      final appBarEditButton = find.descendant(of: find.byType(AppBar), matching: find.byIcon(Icons.edit));
+      expect(appBarEditButton, findsOneWidget);
     });
 
     testWidgets('has delete button in app bar', (tester) async {
@@ -118,7 +123,12 @@ void main() {
       await tester.pumpWidget(createTestWidget(initialState: ItemDetailState(item: item)));
       await tester.pumpAndSettle();
 
-      expect(find.byIcon(Icons.delete), findsOneWidget);
+      // There are 2 delete buttons - one in AppBar and one in body action row
+      expect(find.byIcon(Icons.delete), findsNWidgets(2));
+
+      // Verify delete button in AppBar specifically
+      final appBarDeleteButton = find.descendant(of: find.byType(AppBar), matching: find.byIcon(Icons.delete));
+      expect(appBarDeleteButton, findsOneWidget);
     });
 
     testWidgets('shows completion status', (tester) async {
