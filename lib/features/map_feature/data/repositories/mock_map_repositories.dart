@@ -1,3 +1,6 @@
+import 'package:latlong2/latlong.dart';
+import 'package:zero_setup_flutter/features/map_feature/data/services/navigation_api_service.dart';
+
 import '../../../../core/logger/app_logger.dart';
 import '../../domain/repositories/map_repositories.dart';
 import '../models/map_models.dart';
@@ -224,6 +227,9 @@ class MockRouteRepositoryImpl implements RouteRepository {
 
 /// Mock implementation of VehicleRepository for demo/testing
 class MockVehicleRepositoryImpl implements VehicleRepository {
+  final NavigationApiService _apiService;
+
+  MockVehicleRepositoryImpl(this._apiService);
   final List<VehicleModel> _mockVehicles = [
     VehicleModel(
       id: 'vehicle_1',
@@ -287,6 +293,23 @@ class MockVehicleRepositoryImpl implements VehicleRepository {
     await Future.delayed(const Duration(milliseconds: 500));
     talker.good('✅ Found ${_mockVehicles.length} vehicles');
     return List.from(_mockVehicles);
+  }
+
+  @override
+  Future<List<LatLng>> getRouteForNavigation(LatLng start, LatLng end) async {
+    
+
+    
+    try {
+      talker.info('📥 Fetching routes navigation from: start.longitude=${start.longitude}, start.latitude=${start.latitude}, TO end.longitude=${end.longitude}, end.latitude=${end.latitude}');
+      final routes = await _apiService.getRoutes(start.longitude, start.latitude, end.longitude, end.latitude);
+      talker.good('✅ Fetched ${routes.length} routes');
+      return routes;
+    } catch (e, st) {
+      talker.error('❌ خطا در مسیریابی:', e, st);
+      rethrow;
+    }
+      return [];
   }
 
   @override

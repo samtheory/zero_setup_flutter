@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:zero_setup_flutter/core/providers/core_providers.dart';
+import 'package:zero_setup_flutter/features/map_feature/data/services/navigation_api_service.dart';
 
 import '../../../../core/logger/app_logger.dart';
 import '../../data/models/map_models.dart';
@@ -26,10 +28,22 @@ final routeRepositoryProvider = Provider<RouteRepository>((ref) {
   return MockRouteRepositoryImpl();
 });
 
+final routeApiServiceProvider = Provider<NavigationApiService>((ref) {
+  // Gets Dio with auth interceptor, logging, and error handling
+  final dio = ref.watch(dioProvider);
+
+  talker.debug('Creating ItemApiService with shared Dio instance');
+  return NavigationApiService(dio, baseUrl: 'https://router.project-osrm.org');
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Repository Provider
+// ═══════════════════════════════════════════════════════════════════════════
 /// Vehicle Repository provider
 final vehicleRepositoryProvider = Provider<VehicleRepository>((ref) {
+  final apiService = ref.watch(routeApiServiceProvider);
   talker.debug('Creating MockVehicleRepositoryImpl');
-  return MockVehicleRepositoryImpl();
+  return MockVehicleRepositoryImpl(apiService);
 });
 
 // ═══════════════════════════════════════════════════════════════════════════

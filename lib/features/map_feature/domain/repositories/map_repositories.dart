@@ -1,3 +1,5 @@
+import 'package:latlong2/latlong.dart';
+
 import '../../data/models/map_models.dart';
 
 /// Abstract repository interface for POI data
@@ -56,4 +58,6 @@ abstract class VehicleRepository {
 
   /// Subscribe to single vehicle updates
   Stream<VehicleModel> watchVehicle(String id);
+
+  Future<List<LatLng>> getRouteForNavigation(LatLng start, LatLng end);
 }

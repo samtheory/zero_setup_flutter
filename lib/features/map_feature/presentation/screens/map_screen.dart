@@ -270,14 +270,14 @@ class MapScreen extends HookConsumerWidget {
 }
 
 /// Bottom area for info cards
-class _BottomInfoArea extends StatelessWidget {
+class _BottomInfoArea extends HookConsumerWidget {
   final MapState state;
   final MapStateNotifier notifier;
 
   const _BottomInfoArea({required this.state, required this.notifier});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     // Show POI info card
     if (state.selectedPoi != null) {
       return PoiInfoCard(
@@ -285,6 +285,9 @@ class _BottomInfoArea extends StatelessWidget {
         onClose: () => notifier.selectPoi(null),
         onNavigate: () {
           talker.info('🧭 Navigate to ${state.selectedPoi!.name}');
+          final start = state.userLocation?.latLng ?? LatLng(0, 0);
+          ref.read(vehicleRepositoryProvider).getRouteForNavigation(start, state.selectedPoi!.latLng);
+          // vehicleRepositoryProvider
           talker.info('🧭 Geo ${state.selectedPoi!.latLng}');
           // TODO: Implement navigation
         },
