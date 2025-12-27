@@ -28,8 +28,8 @@ class VehiclesLayer extends StatelessWidget {
         final isSelected = selectedVehicle?.id == vehicle.id;
         return Marker(
           point: vehicle.latLng,
-          width: isSelected ? 80 : 60,
-          height: isSelected ? 90 : 70,
+          width: isSelected ? 110 : 100,
+          height: isSelected ? 90 : 80,
           child: GestureDetector(
             onTap: () => onVehicleTap?.call(vehicle),
             child: VehicleMarker(vehicle: vehicle, isSelected: isSelected, showLabel: showLabels || isSelected),

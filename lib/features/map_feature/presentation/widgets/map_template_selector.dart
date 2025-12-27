@@ -80,6 +80,8 @@ class MapTemplateSelector extends StatelessWidget {
         return Icons.location_city;
       case MapTemplate.esriWorldImagery:
         return Icons.satellite;
+      case MapTemplate.esriWorldImagery2:
+        return Icons.sailing_sharp;
     }
   }
 
@@ -99,6 +101,8 @@ class MapTemplateSelector extends StatelessWidget {
         return Colors.blue;
       case MapTemplate.esriWorldImagery:
         return Colors.blueGrey;
+      case MapTemplate.esriWorldImagery2:
+        return Colors.pink;
     }
   }
 }
@@ -211,6 +215,8 @@ class _TemplateGridItem extends StatelessWidget {
         return Icons.location_city;
       case MapTemplate.esriWorldImagery:
         return Icons.satellite;
+      case MapTemplate.esriWorldImagery2:
+        return Icons.sailing_sharp;
     }
   }
 
@@ -230,6 +236,8 @@ class _TemplateGridItem extends StatelessWidget {
         return 'Street';
       case MapTemplate.esriWorldImagery:
         return 'Satellite';
+      case MapTemplate.esriWorldImagery2:
+        return 'Stadia';
     }
   }
 }

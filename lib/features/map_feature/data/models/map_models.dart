@@ -13,7 +13,7 @@ enum MapTemplate {
   openStreetMap('OpenStreetMap', 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'),
   openTopoMap('OpenTopoMap', 'https://tile.opentopomap.org/{z}/{x}/{y}.png'),
   cartoLight('Carto Light', 'https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'),
-  cartoDark('Carto Dark', 'https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'),
+  cartoDark('Carto Dark', 'https://basemaps.cartocdn.com/spotify_dark/{z}/{x}/{y}.png'),
   cartoVoyager('Carto Voyager', 'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png'),
   esriWorldStreetMap(
     'ESRI Street',
@@ -21,6 +21,10 @@ enum MapTemplate {
   ),
   esriWorldImagery(
     'ESRI Imagery',
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  ),
+  esriWorldImagery2(
+    'ESRI',
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   );
 
@@ -46,6 +50,8 @@ enum MapTemplate {
       case MapTemplate.esriWorldStreetMap:
       case MapTemplate.esriWorldImagery:
         return '© Esri, HERE, Garmin, © OpenStreetMap contributors';
+      case MapTemplate.esriWorldImagery2:
+        return '© Stadia Maps, © OpenStreetMap contributors';
     }
   }
 }
