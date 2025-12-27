@@ -99,7 +99,7 @@ class HomeScreen extends HookConsumerWidget {
                   title: 'Map',
                   color: Colors.red,
                   onTap: () {
-                    // context.push(Routes.mapScreen);
+                    context.push(Routes.map);
                     talker.good('Map tapped');
                   },
                 ),

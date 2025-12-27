@@ -11,12 +11,12 @@
 //   ],
 // );
 
-
 // ⭐ (مغز Navigation)
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zero_setup_flutter/features/map_feature/presentation/screens/map_screen.dart';
 
 import '../shells/main_shell/main_shell.dart';
 import '../../shared/domain/providers/auth_provider.dart';
@@ -37,12 +37,11 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 final routerProvider = Provider<GoRouter>((ref) {
   // وقتی Auth تغییر کنه، Router خودکار refresh میشه
   final authState = ref.watch(authProvider);
-  
+
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation: Routes.home,
     debugLogDiagnostics: true, // برای دیباگ - توی Production غیرفعال کن
-    
     // 🛡️ Auth Guard
     redirect: (context, state) {
       final isLoggedIn = authState.isAuthenticated;
@@ -61,19 +60,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       // در غیر این صورت، اجازه بده
       return null;
     },
-    
+
     routes: [
       // 🔐 Login Route (بدون Shell)
-      GoRoute(
-        path: Routes.login,
-        builder: (context, state) => const LoginScreen(),
-      ),
+      GoRoute(path: Routes.login, builder: (context, state) => const LoginScreen()),
 
       // 🧪 Test Feature Routes (بدون Shell برای نمایش مستقل)
-      GoRoute(
-        path: Routes.testFeature,
-        builder: (context, state) => const ItemListScreen(),
-      ),
+      GoRoute(path: Routes.testFeature, builder: (context, state) => const ItemListScreen()),
       GoRoute(
         path: '${Routes.testFeatureDetail}/:id',
         builder: (context, state) {
@@ -88,7 +81,17 @@ final routerProvider = Provider<GoRouter>((ref) {
           return ItemFormScreen(itemId: id);
         },
       ),
-      
+
+      // ===============================
+      //   Feature Application Routes
+      // ===============================
+
+      // 🗺️ Map Feature Route
+      GoRoute(
+        path: Routes.map,
+        pageBuilder: (context, state) => const NoTransitionPage(child: MapScreen()),
+      ),
+
       // 🏠 Main Shell با Bottom Navigation
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -100,40 +103,34 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: Routes.home,
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: HomeScreen(),
-                ),
+                pageBuilder: (context, state) => const NoTransitionPage(child: HomeScreen()),
               ),
             ],
           ),
-          
+
           // 👤 Branch 1: Profile
           StatefulShellBranch(
             routes: [
               GoRoute(
                 path: Routes.profile,
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: ProfileScreen(),
-                ),
+                pageBuilder: (context, state) => const NoTransitionPage(child: ProfileScreen()),
               ),
             ],
           ),
-          
+
           // ⚙️ Branch 2: Settings
           StatefulShellBranch(
             routes: [
               GoRoute(
                 path: Routes.settings,
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: SettingsScreen(),
-                ),
+                pageBuilder: (context, state) => const NoTransitionPage(child: SettingsScreen()),
               ),
             ],
           ),
         ],
       ),
     ],
-    
+
     // 404 Page
     errorBuilder: (context, state) => Scaffold(
       body: Center(
@@ -142,17 +139,11 @@ final routerProvider = Provider<GoRouter>((ref) {
           children: [
             const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
-            Text(
-              '۴۰۴ - صفحه پیدا نشد!',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
+            Text('۴۰۴ - صفحه پیدا نشد!', style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 8),
             Text('مسیر: ${state.matchedLocation}'),
             const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () => context.go(Routes.home),
-              child: const Text('برگرد به خانه'),
-            ),
+            ElevatedButton(onPressed: () => context.go(Routes.home), child: const Text('برگرد به خانه')),
           ],
         ),
       ),

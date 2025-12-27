@@ -136,7 +136,7 @@ class _ControlButton extends StatelessWidget {
                           ? Colors.grey.shade400
                           : isActive
                           ? Colors.white
-                          : Theme.of(context).primaryColor,
+                          : Colors.white,
                     ),
             ),
           ),
