@@ -189,7 +189,7 @@ class MapScreen extends HookConsumerWidget {
           if (showLayerPanel.value)
             Positioned(
               right: 70,
-              top: MediaQuery.of(context).padding.top + 70,
+              top: MediaQuery.of(context).padding.top + 120,
               child: LayerTogglePanel(
                 showUserLocation: state.userLocation != null,
                 showPois: state.showPoisLayer,

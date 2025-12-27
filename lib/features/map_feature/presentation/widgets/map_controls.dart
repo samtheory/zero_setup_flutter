@@ -352,17 +352,21 @@ class _LayerToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: value ? color : Colors.grey),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(label, style: TextStyle(color: value ? null : Colors.grey)),
-          ),
-          Switch(value: value, onChanged: onChanged, activeThumbColor: color),
-        ],
+      child: SizedBox(
+        width: width - 200,
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: value ? color : Colors.grey),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(label, style: TextStyle(color: value ? null : Colors.grey)),
+            ),
+            Switch(value: value, onChanged: onChanged, activeThumbColor: color),
+          ],
+        ),
       ),
     );
   }
