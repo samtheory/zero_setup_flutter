@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:hooks_riverpod/legacy.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../core/logger/app_logger.dart';
@@ -38,36 +37,33 @@ final vehicleRepositoryProvider = Provider<VehicleRepository>((ref) {
 // ═══════════════════════════════════════════════════════════════════════════
 
 /// Main map state notifier provider
-final mapStateProvider = StateNotifierProvider<MapStateNotifier, MapState>((ref) {
-  return MapStateNotifier(
-    ref.watch(poiRepositoryProvider),
-    ref.watch(routeRepositoryProvider),
-    ref.watch(vehicleRepositoryProvider),
-    ref,
-  );
-});
+final mapStateProvider = NotifierProvider<MapStateNotifier, MapState>(MapStateNotifier.new);
 
 /// Map State Notifier - manages all map state
-class MapStateNotifier extends StateNotifier<MapState> {
-  final PoiRepository _poiRepository;
-  final RouteRepository _routeRepository;
-  final VehicleRepository _vehicleRepository;
-  final Ref _ref;
+class MapStateNotifier extends Notifier<MapState> {
+  late final PoiRepository _poiRepository;
+  late final RouteRepository _routeRepository;
+  late final VehicleRepository _vehicleRepository;
 
   StreamSubscription<List<VehicleModel>>? _vehicleSubscription;
   StreamSubscription<Position>? _locationSubscription;
 
-  MapStateNotifier(this._poiRepository, this._routeRepository, this._vehicleRepository, this._ref)
-    : super(const MapState()) {
-    talker.debug('MapStateNotifier created');
-  }
-
   @override
-  void dispose() {
-    talker.debug('MapStateNotifier disposing');
-    _vehicleSubscription?.cancel();
-    _locationSubscription?.cancel();
-    super.dispose();
+  MapState build() {
+    _poiRepository = ref.watch(poiRepositoryProvider);
+    _routeRepository = ref.watch(routeRepositoryProvider);
+    _vehicleRepository = ref.watch(vehicleRepositoryProvider);
+
+    talker.debug('MapStateNotifier created');
+
+    // Clean up subscriptions when provider is disposed
+    ref.onDispose(() {
+      talker.debug('MapStateNotifier disposing');
+      _vehicleSubscription?.cancel();
+      _locationSubscription?.cancel();
+    });
+
+    return const MapState();
   }
 
   // ═══════════════════════════════════════════════════════════════════════
