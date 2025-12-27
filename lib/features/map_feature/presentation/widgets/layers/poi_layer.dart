@@ -20,7 +20,7 @@ class PoiLayer extends StatelessWidget {
         return Marker(
           point: poi.latLng,
           width: isSelected ? 60 : 50,
-          height: isSelected ? 70 : 60,
+          height: isSelected ? 73 : 60,
           child: GestureDetector(
             onTap: () => onPoiTap?.call(poi),
             child: _PoiMarker(poi: poi, isSelected: isSelected, showLabel: showLabels || isSelected),
