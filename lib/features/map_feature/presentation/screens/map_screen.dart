@@ -38,7 +38,7 @@ class MapScreen extends HookConsumerWidget {
     // UI state
     final showLayerPanel = useState(false);
     final showTemplateSelector = useState(false);
-
+    final showCustomRouteOnMap = useState(true);
     // Initialize map on first build
     useEffect(() {
       talker.info('🗺️ MapScreen mounted');
@@ -97,7 +97,7 @@ class MapScreen extends HookConsumerWidget {
               ),
 
               // Routes layer
-              if (state.showRoutesLayer && state.routes.isNotEmpty)
+              if (state.showRoutesLayer && state.routes.isNotEmpty && showCustomRouteOnMap.value)
                 RoutesLayer(routes: state.routes, selectedRoute: state.selectedRoute, onRouteTap: notifier.selectRoute),
 
               // POI layer
@@ -150,6 +150,8 @@ class MapScreen extends HookConsumerWidget {
             right: 16,
             top: MediaQuery.of(context).padding.top + 70,
             child: MapControls(
+              isShowingCustomRoute: showCustomRouteOnMap.value,
+              onToggleRoutes: () => showCustomRouteOnMap.value = !showCustomRouteOnMap.value,
               currentZoom: state.zoom,
               minZoom: 3.0,
               maxZoom: 18.0,
@@ -283,6 +285,7 @@ class _BottomInfoArea extends StatelessWidget {
         onClose: () => notifier.selectPoi(null),
         onNavigate: () {
           talker.info('🧭 Navigate to ${state.selectedPoi!.name}');
+          talker.info('🧭 Geo ${state.selectedPoi!.latLng}');
           // TODO: Implement navigation
         },
       );
@@ -325,7 +328,7 @@ class _BottomInfoArea extends StatelessWidget {
   }
 }
 
-/// Circular button widget
+/// Circular button widget  -> back button
 class _CircleButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onPressed;

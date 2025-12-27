@@ -7,8 +7,11 @@ class MapControls extends StatelessWidget {
   final VoidCallback? onZoomOut;
   final VoidCallback? onCenterLocation;
   final VoidCallback? onToggleLayers;
+  final VoidCallback? onToggleRoutes;
   final VoidCallback? onToggleMapStyle;
+
   final bool isFollowingLocation;
+  final bool isShowingCustomRoute;
   final bool isLoadingLocation;
   final double? currentZoom;
   final double minZoom;
@@ -16,7 +19,9 @@ class MapControls extends StatelessWidget {
 
   const MapControls({
     super.key,
+    this.isShowingCustomRoute = false,
     this.onZoomIn,
+    this.onToggleRoutes,
     this.onZoomOut,
     this.onCenterLocation,
     this.onToggleLayers,
@@ -43,6 +48,17 @@ class MapControls extends StatelessWidget {
           _ControlButton(icon: Icons.filter_list, onPressed: onToggleLayers, tooltip: 'Toggle Layers'),
           const SizedBox(height: 8),
         ],
+
+        if (onToggleRoutes != null) ...[
+          _ControlButton(
+            isActive: isShowingCustomRoute,
+            icon: Icons.route,
+            onPressed: onToggleRoutes,
+            tooltip: 'Toggle Routes',
+          ),
+          const SizedBox(height: 8),
+        ],
+
         // Zoom controls
         Container(
           decoration: BoxDecoration(
@@ -135,7 +151,7 @@ class _ControlButton extends StatelessWidget {
                       color: onPressed == null
                           ? Colors.grey.shade400
                           : isActive
-                          ? Colors.white
+                          ? Colors.blue
                           : Colors.white,
                     ),
             ),
