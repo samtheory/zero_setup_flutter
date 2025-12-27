@@ -102,6 +102,12 @@ dependencies:
   latlong2: ^0.9.1
   geolocator: ^14.0.2
 
+  # ============================================
+  # Stuff for testing
+  # ============================================
+  persian_fonts: ^1.0.6
+  lucide_icons_flutter: ^3.1.9
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
