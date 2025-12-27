@@ -1,8 +1,16 @@
 name: zero_setup_flutter
-description: "A Template Flutter project."
+description: "A Template Flutter project. Zero setup to start a new Flutter application quickly."
 publish_to: "none"
-
 version: 0.0.1+1
+
+scripts:
+  setup:
+    - flutter pub get
+    - dart run build_runner build --delete-conflicting-outputs
+
+  gen: dart run build_runner build --delete-conflicting-outputs
+  watch: dart run build_runner watch --delete-conflicting-outputs
+  clean: dart run build_runner clean
 
 environment:
   sdk: ^3.10.1
@@ -68,7 +76,7 @@ dependencies:
   toastification: ^3.0.3 # Toast notifications
   intl: ^0.20.2 # Internationalization
   shamsi_date: ^1.1.1 # Jalali date support
-  
+
   # ============================================
   # validating data in Flutter
   # ============================================
@@ -86,6 +94,13 @@ dependencies:
   # ============================================
   freezed_annotation: ^3.1.0 # Annotations for Freezed data classes
   json_annotation: ^4.9.0 # Annotations for JSON serialization
+
+  # ============================================
+  # Maps and Location
+  # ============================================
+  flutter_map: ^8.2.2
+  latlong2: ^0.9.1
+  geolocator: ^14.0.2
 
 dev_dependencies:
   flutter_test:

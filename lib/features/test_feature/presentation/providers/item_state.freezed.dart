@@ -190,8 +190,6 @@ extension ItemListStatePatterns on ItemListState {
     switch (_that) {
       case _ItemListState():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -301,8 +299,6 @@ extension ItemListStatePatterns on ItemListState {
           _that.hasMore,
           _that.searchQuery,
         );
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -695,8 +691,6 @@ extension ItemDetailStatePatterns on ItemDetailState {
     switch (_that) {
       case _ItemDetailState():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -802,8 +796,6 @@ extension ItemDetailStatePatterns on ItemDetailState {
           _that.error,
           _that.successMessage,
         );
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 

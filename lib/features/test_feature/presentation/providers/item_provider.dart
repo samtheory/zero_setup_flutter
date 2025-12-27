@@ -20,6 +20,7 @@ import 'item_state.dart';
 final itemApiServiceProvider = Provider<ItemApiService>((ref) {
   // Gets Dio with auth interceptor, logging, and error handling
   final dio = ref.watch(dioProvider);
+  
   talker.debug('Creating ItemApiService with shared Dio instance');
   return ItemApiService(dio);
 });
