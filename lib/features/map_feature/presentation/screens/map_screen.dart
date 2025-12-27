@@ -8,12 +8,15 @@ import '../../../../core/logger/app_logger.dart';
 import '../../data/models/map_models.dart';
 import '../providers/map_provider.dart';
 import '../providers/map_state.dart';
+import '../providers/navigation_provider.dart';
+import '../widgets/layers/navigation_layer.dart';
 import '../widgets/layers/poi_layer.dart';
 import '../widgets/layers/route_layer.dart';
 import '../widgets/layers/user_location_layer.dart';
 import '../widgets/layers/vehicle_layer.dart';
 import '../widgets/map_controls.dart';
 import '../widgets/map_template_selector.dart';
+import '../widgets/navigation_panel.dart';
 
 /// Main Map Screen
 /// Demonstrates:
@@ -31,6 +34,10 @@ class MapScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(mapStateProvider);
     final notifier = ref.read(mapStateProvider.notifier);
+
+    // Navigation state
+    final navigationState = ref.watch(navigationNotifierProvider);
+    final navigationNotifier = ref.read(navigationNotifierProvider.notifier);
 
     // Map controller
     final mapController = useMemoized(() => MapController());
@@ -99,6 +106,18 @@ class MapScreen extends HookConsumerWidget {
               // Routes layer
               if (state.showRoutesLayer && state.routes.isNotEmpty && showCustomRouteOnMap.value)
                 RoutesLayer(routes: state.routes, selectedRoute: state.selectedRoute, onRouteTap: notifier.selectRoute),
+
+              // Navigation layer (OSRM route)
+              if (navigationState.hasRoute)
+                NavigationLayer(
+                  navigationState: navigationState,
+                  onStepTapped: (index) {
+                    navigationNotifier.highlightStep(index);
+                    // Center map on step location
+                    final step = navigationState.steps[index];
+                    mapController.move(step.location, state.zoom);
+                  },
+                ),
 
               // POI layer
               if (state.showPoisLayer && state.visiblePois.isNotEmpty)
@@ -221,11 +240,79 @@ class MapScreen extends HookConsumerWidget {
 
           // Bottom info cards
           Positioned(
-            bottom: 0,
+            bottom: navigationState.hasRoute
+                ? (navigationState.isPanelExpanded ? MediaQuery.of(context).size.height * 0.6 : 180)
+                : 0,
             left: 0,
             right: 0,
-            child: _BottomInfoArea(state: state, notifier: notifier),
+            child: _BottomInfoArea(
+              state: state,
+              notifier: notifier,
+              onNavigate: (destination, destinationName) async {
+                final origin = state.userLocation?.latLng;
+                if (origin == null) {
+                  talker.warning('🧭 Cannot navigate: user location not available');
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(const SnackBar(content: Text('Please enable location to navigate')));
+                  return;
+                }
+                await navigationNotifier.calculateRoute(
+                  origin: origin,
+                  destination: destination,
+                  originName: 'My Location',
+                  destinationName: destinationName,
+                );
+                // Fit map to show entire route
+                if (navigationState.hasRoute) {
+                  final bounds = LatLngBounds.fromPoints(navigationState.routePoints);
+                  mapController.fitCamera(CameraFit.bounds(bounds: bounds, padding: const EdgeInsets.all(50)));
+                }
+              },
+            ),
           ),
+
+          // Navigation panel (Google Maps-style)
+          if (navigationState.hasRoute)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: NavigationPanel(
+                navigationState: navigationState,
+                onClose: () {
+                  navigationNotifier.clearNavigation();
+                },
+                onStartNavigation: () {
+                  navigationNotifier.startNavigation();
+                },
+                onStopNavigation: () {
+                  navigationNotifier.stopNavigation();
+                },
+                onToggleExpand: () {
+                  navigationNotifier.togglePanel();
+                },
+                onStepTapped: (index) {
+                  navigationNotifier.highlightStep(index);
+                  // Center map on step location
+                  final step = navigationState.steps[index];
+                  mapController.move(step.location, 16);
+                },
+              ),
+            ),
+
+          // Navigation banner (during active navigation)
+          if (navigationState.isNavigating && navigationState.currentStep != null)
+            Positioned(
+              top: MediaQuery.of(context).padding.top + 70,
+              left: 16,
+              right: 16,
+              child: NavigationBanner(
+                currentStep: navigationState.currentStep!,
+                nextStep: navigationState.nextStep,
+                onTap: () => navigationNotifier.expandPanel(),
+              ),
+            ),
 
           // Loading overlay
           if (state.isAnyLoading && !state.isMapReady)
@@ -273,8 +360,9 @@ class MapScreen extends HookConsumerWidget {
 class _BottomInfoArea extends HookConsumerWidget {
   final MapState state;
   final MapStateNotifier notifier;
+  final Future<void> Function(LatLng destination, String? destinationName)? onNavigate;
 
-  const _BottomInfoArea({required this.state, required this.notifier});
+  const _BottomInfoArea({required this.state, required this.notifier, this.onNavigate});
 
   @override
   Widget build(BuildContext context, ref) {
@@ -285,11 +373,7 @@ class _BottomInfoArea extends HookConsumerWidget {
         onClose: () => notifier.selectPoi(null),
         onNavigate: () {
           talker.info('🧭 Navigate to ${state.selectedPoi!.name}');
-          final start = state.userLocation?.latLng ?? LatLng(0, 0);
-          ref.read(vehicleRepositoryProvider).getRouteForNavigation(start, state.selectedPoi!.latLng);
-          // vehicleRepositoryProvider
-          talker.info('🧭 Geo ${state.selectedPoi!.latLng}');
-          // TODO: Implement navigation
+          onNavigate?.call(state.selectedPoi!.latLng, state.selectedPoi!.name);
         },
       );
     }
@@ -301,7 +385,10 @@ class _BottomInfoArea extends HookConsumerWidget {
         onClose: () => notifier.selectRoute(null),
         onStartNavigation: () {
           talker.info('🧭 Start navigation on ${state.selectedRoute!.name}');
-          // TODO: Implement navigation
+          // Navigate along the custom route waypoints
+          if (state.selectedRoute!.waypoints.length >= 2) {
+            onNavigate?.call(state.selectedRoute!.waypoints.last.latLng, state.selectedRoute!.name);
+          }
         },
       );
     }
