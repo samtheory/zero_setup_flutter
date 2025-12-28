@@ -20,9 +20,7 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<UserModel> updateUser(UpdateUserRequest request) async {
     talker.info('Updating user: ${request.name}');
-    talker.log('Updating user: ${request.name}');
     final user = await _apiService.updateUser(request);
-    talker.log('Updating userrrrr: ${user.name}');
     talker.good('User updated: ${user.name}');
     return user;
   }
