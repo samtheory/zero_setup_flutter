@@ -13,16 +13,17 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$UserState {
-  /// Current user data (null if not loaded)
-  UserModel? get user;
+  /// Current user data
+  UserModel get user;
 
-  /// Loading states for different operations
-  bool get isLoading;
+  /// Loading state for update operation
   bool get isUpdating;
+
+  /// Loading state for logout operation
   bool get isLoggingOut;
 
-  /// Error message (null if no error)
-  String? get error;
+  /// Action-specific error (update/logout failures)
+  String? get actionError;
 
   /// Create a copy of UserState
   /// with the given fields replaced by the non-null parameter values.
@@ -37,28 +38,21 @@ mixin _$UserState {
         (other.runtimeType == runtimeType &&
             other is UserState &&
             (identical(other.user, user) || other.user == user) &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
             (identical(other.isUpdating, isUpdating) ||
                 other.isUpdating == isUpdating) &&
             (identical(other.isLoggingOut, isLoggingOut) ||
                 other.isLoggingOut == isLoggingOut) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.actionError, actionError) ||
+                other.actionError == actionError));
   }
 
   @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    user,
-    isLoading,
-    isUpdating,
-    isLoggingOut,
-    error,
-  );
+  int get hashCode =>
+      Object.hash(runtimeType, user, isUpdating, isLoggingOut, actionError);
 
   @override
   String toString() {
-    return 'UserState(user: $user, isLoading: $isLoading, isUpdating: $isUpdating, isLoggingOut: $isLoggingOut, error: $error)';
+    return 'UserState(user: $user, isUpdating: $isUpdating, isLoggingOut: $isLoggingOut, actionError: $actionError)';
   }
 }
 
@@ -68,14 +62,13 @@ abstract mixin class $UserStateCopyWith<$Res> {
       _$UserStateCopyWithImpl;
   @useResult
   $Res call({
-    UserModel? user,
-    bool isLoading,
+    UserModel user,
     bool isUpdating,
     bool isLoggingOut,
-    String? error,
+    String? actionError,
   });
 
-  $UserModelCopyWith<$Res>? get user;
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -90,22 +83,17 @@ class _$UserStateCopyWithImpl<$Res> implements $UserStateCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? user = freezed,
-    Object? isLoading = null,
+    Object? user = null,
     Object? isUpdating = null,
     Object? isLoggingOut = null,
-    Object? error = freezed,
+    Object? actionError = freezed,
   }) {
     return _then(
       _self.copyWith(
-        user: freezed == user
+        user: null == user
             ? _self.user
             : user // ignore: cast_nullable_to_non_nullable
-                  as UserModel?,
-        isLoading: null == isLoading
-            ? _self.isLoading
-            : isLoading // ignore: cast_nullable_to_non_nullable
-                  as bool,
+                  as UserModel,
         isUpdating: null == isUpdating
             ? _self.isUpdating
             : isUpdating // ignore: cast_nullable_to_non_nullable
@@ -114,9 +102,9 @@ class _$UserStateCopyWithImpl<$Res> implements $UserStateCopyWith<$Res> {
             ? _self.isLoggingOut
             : isLoggingOut // ignore: cast_nullable_to_non_nullable
                   as bool,
-        error: freezed == error
-            ? _self.error
-            : error // ignore: cast_nullable_to_non_nullable
+        actionError: freezed == actionError
+            ? _self.actionError
+            : actionError // ignore: cast_nullable_to_non_nullable
                   as String?,
       ),
     );
@@ -126,12 +114,8 @@ class _$UserStateCopyWithImpl<$Res> implements $UserStateCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $UserModelCopyWith<$Res>? get user {
-    if (_self.user == null) {
-      return null;
-    }
-
-    return $UserModelCopyWith<$Res>(_self.user!, (value) {
+  $UserModelCopyWith<$Res> get user {
+    return $UserModelCopyWith<$Res>(_self.user, (value) {
       return _then(_self.copyWith(user: value));
     });
   }
@@ -186,8 +170,6 @@ extension UserStatePatterns on UserState {
     switch (_that) {
       case _UserState():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -231,11 +213,10 @@ extension UserStatePatterns on UserState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-      UserModel? user,
-      bool isLoading,
+      UserModel user,
       bool isUpdating,
       bool isLoggingOut,
-      String? error,
+      String? actionError,
     )?
     $default, {
     required TResult orElse(),
@@ -245,10 +226,9 @@ extension UserStatePatterns on UserState {
       case _UserState() when $default != null:
         return $default(
           _that.user,
-          _that.isLoading,
           _that.isUpdating,
           _that.isLoggingOut,
-          _that.error,
+          _that.actionError,
         );
       case _:
         return orElse();
@@ -271,11 +251,10 @@ extension UserStatePatterns on UserState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-      UserModel? user,
-      bool isLoading,
+      UserModel user,
       bool isUpdating,
       bool isLoggingOut,
-      String? error,
+      String? actionError,
     )
     $default,
   ) {
@@ -284,13 +263,10 @@ extension UserStatePatterns on UserState {
       case _UserState():
         return $default(
           _that.user,
-          _that.isLoading,
           _that.isUpdating,
           _that.isLoggingOut,
-          _that.error,
+          _that.actionError,
         );
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -309,11 +285,10 @@ extension UserStatePatterns on UserState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
-      UserModel? user,
-      bool isLoading,
+      UserModel user,
       bool isUpdating,
       bool isLoggingOut,
-      String? error,
+      String? actionError,
     )?
     $default,
   ) {
@@ -322,10 +297,9 @@ extension UserStatePatterns on UserState {
       case _UserState() when $default != null:
         return $default(
           _that.user,
-          _that.isLoading,
           _that.isUpdating,
           _that.isLoggingOut,
-          _that.error,
+          _that.actionError,
         );
       case _:
         return null;
@@ -337,31 +311,29 @@ extension UserStatePatterns on UserState {
 
 class _UserState extends UserState {
   const _UserState({
-    this.user,
-    this.isLoading = false,
+    required this.user,
     this.isUpdating = false,
     this.isLoggingOut = false,
-    this.error,
+    this.actionError,
   }) : super._();
 
-  /// Current user data (null if not loaded)
+  /// Current user data
   @override
-  final UserModel? user;
+  final UserModel user;
 
-  /// Loading states for different operations
-  @override
-  @JsonKey()
-  final bool isLoading;
+  /// Loading state for update operation
   @override
   @JsonKey()
   final bool isUpdating;
+
+  /// Loading state for logout operation
   @override
   @JsonKey()
   final bool isLoggingOut;
 
-  /// Error message (null if no error)
+  /// Action-specific error (update/logout failures)
   @override
-  final String? error;
+  final String? actionError;
 
   /// Create a copy of UserState
   /// with the given fields replaced by the non-null parameter values.
@@ -377,28 +349,21 @@ class _UserState extends UserState {
         (other.runtimeType == runtimeType &&
             other is _UserState &&
             (identical(other.user, user) || other.user == user) &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
             (identical(other.isUpdating, isUpdating) ||
                 other.isUpdating == isUpdating) &&
             (identical(other.isLoggingOut, isLoggingOut) ||
                 other.isLoggingOut == isLoggingOut) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.actionError, actionError) ||
+                other.actionError == actionError));
   }
 
   @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    user,
-    isLoading,
-    isUpdating,
-    isLoggingOut,
-    error,
-  );
+  int get hashCode =>
+      Object.hash(runtimeType, user, isUpdating, isLoggingOut, actionError);
 
   @override
   String toString() {
-    return 'UserState(user: $user, isLoading: $isLoading, isUpdating: $isUpdating, isLoggingOut: $isLoggingOut, error: $error)';
+    return 'UserState(user: $user, isUpdating: $isUpdating, isLoggingOut: $isLoggingOut, actionError: $actionError)';
   }
 }
 
@@ -412,15 +377,14 @@ abstract mixin class _$UserStateCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    UserModel? user,
-    bool isLoading,
+    UserModel user,
     bool isUpdating,
     bool isLoggingOut,
-    String? error,
+    String? actionError,
   });
 
   @override
-  $UserModelCopyWith<$Res>? get user;
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -435,22 +399,17 @@ class __$UserStateCopyWithImpl<$Res> implements _$UserStateCopyWith<$Res> {
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? user = freezed,
-    Object? isLoading = null,
+    Object? user = null,
     Object? isUpdating = null,
     Object? isLoggingOut = null,
-    Object? error = freezed,
+    Object? actionError = freezed,
   }) {
     return _then(
       _UserState(
-        user: freezed == user
+        user: null == user
             ? _self.user
             : user // ignore: cast_nullable_to_non_nullable
-                  as UserModel?,
-        isLoading: null == isLoading
-            ? _self.isLoading
-            : isLoading // ignore: cast_nullable_to_non_nullable
-                  as bool,
+                  as UserModel,
         isUpdating: null == isUpdating
             ? _self.isUpdating
             : isUpdating // ignore: cast_nullable_to_non_nullable
@@ -459,9 +418,9 @@ class __$UserStateCopyWithImpl<$Res> implements _$UserStateCopyWith<$Res> {
             ? _self.isLoggingOut
             : isLoggingOut // ignore: cast_nullable_to_non_nullable
                   as bool,
-        error: freezed == error
-            ? _self.error
-            : error // ignore: cast_nullable_to_non_nullable
+        actionError: freezed == actionError
+            ? _self.actionError
+            : actionError // ignore: cast_nullable_to_non_nullable
                   as String?,
       ),
     );
@@ -471,12 +430,8 @@ class __$UserStateCopyWithImpl<$Res> implements _$UserStateCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $UserModelCopyWith<$Res>? get user {
-    if (_self.user == null) {
-      return null;
-    }
-
-    return $UserModelCopyWith<$Res>(_self.user!, (value) {
+  $UserModelCopyWith<$Res> get user {
+    return $UserModelCopyWith<$Res>(_self.user, (value) {
       return _then(_self.copyWith(user: value));
     });
   }

@@ -53,7 +53,7 @@ class _UserApiService implements UserApiService {
     final _headers = <String, dynamic>{};
     final _data = request;
     final _options = _setStreamType<UserModel>(
-      Options(method: 'PUT', headers: _headers, extra: _extra)
+      Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
             '/user/me',

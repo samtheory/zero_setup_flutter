@@ -4,37 +4,35 @@ import '../../data/models/user_model.dart';
 
 part 'user_state.freezed.dart';
 
-/// User profile state
+/// User profile state for AsyncNotifier
 ///
-/// This is a pure DATA class - it only holds state, no logic.
-/// All state mutations happen in the Notifier (controller).
+/// Note: Main loading/error is handled by AsyncValue wrapper.
+/// This state only tracks action-specific states (updating, logging out).
 @freezed
 sealed class UserState with _$UserState {
   const factory UserState({
-    /// Current user data (null if not loaded)
-    UserModel? user,
+    /// Current user data
+    required UserModel user,
 
-    /// Loading states for different operations
-    @Default(false) bool isLoading,
+    /// Loading state for update operation
     @Default(false) bool isUpdating,
+
+    /// Loading state for logout operation
     @Default(false) bool isLoggingOut,
 
-    /// Error message (null if no error)
-    String? error,
+    /// Action-specific error (update/logout failures)
+    String? actionError,
   }) = _UserState;
 
   const UserState._();
 
   // ═══════════════════════════════════════════════════════════════════════
-  // Computed properties (derived from state)
+  // Computed properties
   // ═══════════════════════════════════════════════════════════════════════
 
-  /// Whether user data is available
-  bool get hasUser => user != null;
+  /// Whether any action is in progress
+  bool get isBusy => isUpdating || isLoggingOut;
 
-  /// Whether any operation is in progress
-  bool get isBusy => isLoading || isUpdating || isLoggingOut;
-
-  /// Whether there's an error
-  bool get hasError => error != null;
+  /// Whether there's an action error
+  bool get hasActionError => actionError != null;
 }

@@ -170,8 +170,6 @@ extension UserModelPatterns on UserModel {
     switch (_that) {
       case _UserModel():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -277,8 +275,6 @@ extension UserModelPatterns on UserModel {
           _that.phone,
           _that.createdAt,
         );
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -593,8 +589,6 @@ extension UpdateUserRequestPatterns on UpdateUserRequest {
     switch (_that) {
       case _UpdateUserRequest():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -670,8 +664,6 @@ extension UpdateUserRequestPatterns on UpdateUserRequest {
     switch (_that) {
       case _UpdateUserRequest():
         return $default(_that.name, _that.phone, _that.avatarUrl);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 

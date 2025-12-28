@@ -35,81 +35,94 @@ final logoutUseCaseProvider = Provider<LogoutUseCase>((ref) {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
-// NOTIFIER (Controller)
+// ASYNC NOTIFIER (Controller with async state)
 //
 // This is your "Controller" - it contains:
-// - Current state (UserState)
+// - Current state wrapped in AsyncValue (loading/error/data)
 // - All actions the user can perform
 //
-// Pattern: Notifier<State> = State + Actions combined
+// Pattern: AsyncNotifier<State> = Auto-load + Actions
+// Benefits:
+// - Auto-loads data when first watched (no useEffect needed)
+// - Built-in loading/error states via AsyncValue
+// - ref.invalidate() to refresh
 // ═══════════════════════════════════════════════════════════════════════════
 
-class UserNotifier extends Notifier<UserState> {
-  late final UserRepository _repository;
-  late final LogoutUseCase _logoutUseCase;
+class UserNotifier extends AsyncNotifier<UserState> {
+  // Use getters instead of late final to avoid re-initialization error
+  UserRepository get _repository => ref.read(userRepositoryProvider);
+  LogoutUseCase get _logoutUseCase => ref.read(logoutUseCaseProvider);
 
   @override
-  UserState build() {
-    // Inject dependencies in build() method
-    _repository = ref.watch(userRepositoryProvider);
-    _logoutUseCase = ref.watch(logoutUseCaseProvider);
-    return const UserState();
+  Future<UserState> build() async {
+    // Auto-load user on first watch
+    talker.info('UserNotifier: Auto-loading user');
+    final user = await _repository.getCurrentUser();
+    talker.good('UserNotifier: User loaded - ${user.name}');
+
+    return UserState(user: user);
   }
 
   // ═══════════════════════════════════════════════════════════════════════
   // ACTIONS (Methods that modify state)
   // ═══════════════════════════════════════════════════════════════════════
 
-  /// Load current user profile
-  Future<void> loadUser() async {
-    if (state.isLoading) return;
-
-    state = state.copyWith(isLoading: true, error: null);
-
-    try {
-      final user = await _repository.getCurrentUser();
-      state = state.copyWith(user: user, isLoading: false);
-    } catch (e) {
-      talker.error('Failed to load user', e);
-      state = state.copyWith(isLoading: false, error: 'Failed to load profile');
-    }
+  /// Refresh user data (pull-to-refresh)
+  Future<void> refresh() async {
+    talker.info('UserNotifier: Refreshing user');
+    ref.invalidateSelf();
   }
 
   /// Update user profile
   Future<bool> updateProfile(UpdateUserRequest request) async {
-    if (state.isUpdating) return false;
+    final currentState = state.asData?.value;
+    if (currentState == null || currentState.isUpdating) return false;
 
-    state = state.copyWith(isUpdating: true, error: null);
+    // Set updating flag
+    state = AsyncData(currentState.copyWith(isUpdating: true, actionError: null));
 
     try {
-      final user = await _repository.updateUser(request);
-      state = state.copyWith(user: user, isUpdating: false);
+      final updatedUser = await _repository.updateUser(request);
+
+      // Merge only specific fields from response into existing user
+      // final mergedUser = currentState.user.copyWith(name: updatedUser.name, phone: updatedUser.phone);
+
+      state = AsyncData(currentState.copyWith(user: updatedUser, isUpdating: false));
+      talker.good('UserNotifier: Profile updated');
       return true;
     } catch (e) {
-      talker.error('Failed to update user', e);
-      state = state.copyWith(isUpdating: false, error: 'Failed to update profile');
+      talker.error('UserNotifier: Failed to update profile', e);
+      state = AsyncData(currentState.copyWith(isUpdating: false, actionError: 'Failed to update profile'));
       return false;
     }
   }
 
   /// Logout user
-  Future<void> logout() async {
-    if (state.isLoggingOut) return;
+  Future<bool> logout() async {
+    final currentState = state.asData?.value;
+    if (currentState == null || currentState.isLoggingOut) return false;
 
-    state = state.copyWith(isLoggingOut: true, error: null);
+    // Set logging out flag
+    state = AsyncData(currentState.copyWith(isLoggingOut: true, actionError: null));
 
     try {
       await _logoutUseCase.call();
-      state = const UserState(); // Reset to initial state
+      talker.good('UserNotifier: Logged out successfully');
+      // Don't update state - navigation will happen and provider will be disposed
+      return true;
     } catch (e) {
-      talker.error('Failed to logout', e);
-      state = state.copyWith(isLoggingOut: false, error: 'Failed to logout');
+      talker.error('UserNotifier: Failed to logout', e);
+      state = AsyncData(currentState.copyWith(isLoggingOut: false, actionError: 'Failed to logout'));
+      return false;
     }
   }
 
-  /// Clear any error
-  void clearError() {
-    state = state.copyWith(error: null);
+  /// Clear action error
+  void clearActionError() {
+    final currentState = state.asData?.value;
+    if (currentState != null) {
+      state = AsyncData(currentState.copyWith(actionError: null));
+    }
   }
 }
 
@@ -117,7 +130,7 @@ class UserNotifier extends Notifier<UserState> {
 // MAIN PROVIDER
 // ═══════════════════════════════════════════════════════════════════════════
 
-final userProvider = NotifierProvider<UserNotifier, UserState>(UserNotifier.new);
+final userProvider = AsyncNotifierProvider.autoDispose<UserNotifier, UserState>(UserNotifier.new);
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SELECTOR PROVIDERS (Optional - for fine-grained rebuilds)
@@ -125,10 +138,15 @@ final userProvider = NotifierProvider<UserNotifier, UserState>(UserNotifier.new)
 
 /// Watch only user data (rebuilds only when user changes)
 final currentUserProvider = Provider<UserModel?>((ref) {
-  return ref.watch(userProvider.select((state) => state.user));
+  return ref.watch(userProvider).asData?.value.user;
 });
 
-/// Watch only loading state
+/// Watch only loading state (initial load)
 final isUserLoadingProvider = Provider<bool>((ref) {
-  return ref.watch(userProvider.select((state) => state.isLoading));
+  return ref.watch(userProvider).isLoading;
+});
+
+/// Watch if user data is available
+final hasUserDataProvider = Provider<bool>((ref) {
+  return ref.watch(userProvider).hasValue;
 });

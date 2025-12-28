@@ -15,7 +15,7 @@ abstract class UserApiService {
   Future<UserModel> getCurrentUser();
 
   /// Update user profile
-  @PUT('/user/me')
+  @PATCH('/user/me')
   Future<UserModel> updateUser(@Body() UpdateUserRequest request);
 
   /// Delete user account

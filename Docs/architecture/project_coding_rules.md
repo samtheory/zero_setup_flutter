@@ -6,24 +6,58 @@
 
 ## 🔧 State Management (Riverpod)
 
-### ✅ ALWAYS use `Notifier` pattern (NOT StateNotifier)
+### ✅ ALWAYS use `AsyncNotifier` for features that load data
 
 ```dart
-// ✅ CORRECT - Use Notifier
-class MyNotifier extends Notifier<MyState> {
+// ✅ CORRECT - Use AsyncNotifier (auto-loads, has actions)
+class UserNotifier extends AsyncNotifier<UserState> {
   @override
-  MyState build() {
-    // Inject dependencies here
-    final repo = ref.watch(myRepositoryProvider);
-    return MyState.initial();
+  Future<UserState> build() async {
+    // Inject dependencies
+    final repo = ref.watch(userRepositoryProvider);
+    
+    // Auto-loads on first watch!
+    final user = await repo.getCurrentUser();
+    return UserState(user: user);
   }
   
-  void doAction() {
-    state = state.copyWith(...);
+  Future<void> refresh() async {
+    ref.invalidateSelf(); // Re-triggers build()
+  }
+  
+  Future<bool> updateProfile(UpdateRequest request) async {
+    // Access current data safely
+    final current = state.valueOrNull;
+    if (current == null) return false;
+    
+    // Update state with action-specific loading
+    state = AsyncData(current.copyWith(isUpdating: true));
+    
+    try {
+      final user = await _repo.update(request);
+      state = AsyncData(current.copyWith(user: user, isUpdating: false));
+      return true;
+    } catch (e) {
+      state = AsyncData(current.copyWith(isUpdating: false, error: e.toString()));
+      return false;
+    }
   }
 }
 
-final myProvider = NotifierProvider<MyNotifier, MyState>(MyNotifier.new);
+final userProvider = AsyncNotifierProvider<UserNotifier, UserState>(UserNotifier.new);
+
+// In UI - use .when() pattern (no useEffect needed!)
+asyncState.when(
+  loading: () => CircularProgressIndicator(),
+  error: (e, st) => Text('Error: $e'),
+  data: (state) => UserProfile(user: state.user),
+);
+```
+
+```dart
+// ⚠️ AVOID - Plain Notifier requires manual load in useEffect
+class UserNotifier extends Notifier<UserState> { ... }
+// Then in UI: useEffect(() { notifier.loadUser(); }, []);
 ```
 
 ```dart
@@ -35,10 +69,10 @@ final myProvider = StateNotifierProvider<MyNotifier, MyState>((ref) => ...);
 ### Provider Types Reference:
 | Use Case | Provider Type |
 |----------|---------------|
-| State + Actions | `NotifierProvider<N, S>(N.new)` |
-| Async State + Actions | `AsyncNotifierProvider<N, S>(N.new)` |
+| **State + Actions + Auto-load** | `AsyncNotifierProvider<N, S>(N.new)` ⭐ |
+| State + Actions (sync init) | `NotifierProvider<N, S>(N.new)` |
 | Simple value/service | `Provider<T>((ref) => ...)` |
-| Future data | `FutureProvider<T>((ref) async => ...)` |
+| Read-only async data | `FutureProvider<T>((ref) async => ...)` |
 | Stream data | `StreamProvider<T>((ref) => ...)` |
 
 ---

@@ -1,136 +1,137 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:zero_setup_flutter/features/ex_user_feature/presentation/providers/user_state.dart';
 
 import '../../../../core/logger/app_logger.dart';
 import '../../data/models/user_model.dart';
 import '../providers/user_provider.dart';
+import '../providers/user_state.dart';
 
 /// User Profile Screen
 ///
-/// Demonstrates:
-/// - Loading user data on mount
-/// - Displaying user info
-/// - Update profile action
-/// - Logout action
-/// - Error handling
-class UserProfileScreen extends HookConsumerWidget {
+/// Demonstrates AsyncNotifier pattern:
+/// - Auto-loads user data when watched (no useEffect needed!)
+/// - Uses AsyncValue.when() for clean loading/error/data handling
+/// - Actions still available via notifier
+class UserProfileScreen extends ConsumerWidget {
   const UserProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch state (rebuilds when state changes)
-    final state = ref.watch(userProvider);
-
-    // Get notifier for actions (doesn't cause rebuilds)
+    // AsyncValue<UserState> - auto-loads on first watch!
+    final asyncState = ref.watch(userProvider);
     final notifier = ref.read(userProvider.notifier);
 
-    // Load user on first build
-    useEffect(() {
-      talker.info('UserProfileScreen: mounted');
-      notifier.loadUser();
-      return () => talker.info('UserProfileScreen: disposed');
-    }, []);
+    talker.debug('UserProfileScreen: rebuild - ${asyncState.runtimeType}');
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
         actions: [
-          // Logout button
-          IconButton(
-            onPressed: state.isLoggingOut ? null : () => _showLogoutDialog(context, notifier),
-            icon: state.isLoggingOut
-                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                : const Icon(Icons.logout),
+          // Logout button - only show when we have data
+          asyncState.maybeWhen(
+            data: (state) => IconButton(
+              onPressed: state.isLoggingOut ? null : () => _showLogoutDialog(context, notifier),
+              icon: state.isLoggingOut
+                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                  : const Icon(Icons.logout),
+            ),
+            orElse: () => const SizedBox.shrink(),
           ),
         ],
       ),
-      body: _buildBody(context, ref, state, notifier),
+      body: _buildBody(context, ref, asyncState, notifier),
     );
   }
 
-  Widget _buildBody(BuildContext context, WidgetRef ref, UserState state, UserNotifier notifier) {
-    // Loading state
-    if (state.isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+  Widget _buildBody(BuildContext context, WidgetRef ref, AsyncValue<UserState> asyncState, UserNotifier notifier) {
+    // AsyncValue.when() handles all 3 states cleanly
+    return asyncState.when(
+      // ═══════════════════════════════════════════════════════════════════════
+      // LOADING STATE (auto-triggered on first watch)
+      // ═══════════════════════════════════════════════════════════════════════
+      loading: () => const Center(child: CircularProgressIndicator()),
 
-    // Error state (no user)
-    if (state.hasError && !state.hasUser) {
-      return Center(
+      // ═══════════════════════════════════════════════════════════════════════
+      // ERROR STATE (failed to load)
+      // ═══════════════════════════════════════════════════════════════════════
+      error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
-            Text(state.error ?? 'Error loading profile'),
+            Text(error.toString()),
             const SizedBox(height: 16),
-            ElevatedButton(onPressed: notifier.loadUser, child: const Text('Retry')),
+            ElevatedButton(
+              onPressed: () => ref.invalidate(userProvider), // Re-trigger build()
+              child: const Text('Retry'),
+            ),
           ],
         ),
-      );
-    }
-
-    // No user (shouldn't happen if logged in)
-    if (!state.hasUser) {
-      return const Center(child: Text('No user data'));
-    }
-
-    // User profile
-    final user = state.user!;
-    return RefreshIndicator(
-      onRefresh: notifier.loadUser,
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // Avatar
-          Center(
-            child: CircleAvatar(
-              radius: 50,
-              backgroundImage: user.avatarUrl != null ? NetworkImage(user.avatarUrl!) : null,
-              child: user.avatarUrl == null
-                  ? Text(user.name.substring(0, 1).toUpperCase(), style: const TextStyle(fontSize: 36))
-                  : null,
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // User info cards
-          _InfoTile(icon: Icons.person, label: 'Name', value: user.name),
-          _InfoTile(icon: Icons.email, label: 'Email', value: user.email),
-          if (user.phone != null) _InfoTile(icon: Icons.phone, label: 'Phone', value: user.phone!),
-
-          const SizedBox(height: 24),
-
-          // Edit button
-          ElevatedButton.icon(
-            onPressed: state.isUpdating ? null : () => _showEditDialog(context, ref, user),
-            icon: const Icon(Icons.edit),
-            label: state.isUpdating
-                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                : const Text('Edit Profile'),
-          ),
-
-          // Error message
-          if (state.hasError && state.hasUser) ...[
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(color: Colors.red.shade50, borderRadius: BorderRadius.circular(8)),
-              child: Row(
-                children: [
-                  const Icon(Icons.error, color: Colors.red, size: 20),
-                  const SizedBox(width: 8),
-                  Expanded(child: Text(state.error!)),
-                  IconButton(icon: const Icon(Icons.close, size: 18), onPressed: notifier.clearError),
-                ],
-              ),
-            ),
-          ],
-        ],
       ),
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // DATA STATE (user loaded successfully)
+      // ═══════════════════════════════════════════════════════════════════════
+      data: (state) {
+        final user = state.user;
+
+        return RefreshIndicator(
+          onRefresh: notifier.refresh,
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              // Avatar
+              Center(
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: user.avatarUrl != null ? NetworkImage(user.avatarUrl!) : null,
+                  child: user.avatarUrl == null
+                      ? Text(user.name.substring(0, 1).toUpperCase(), style: const TextStyle(fontSize: 36))
+                      : null,
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // User info cards
+              _InfoTile(icon: Icons.person, label: 'Name', value: user.name),
+              _InfoTile(icon: Icons.email, label: 'Email', value: user.email),
+              if (user.phone != null) _InfoTile(icon: Icons.phone, label: 'Phone', value: user.phone!),
+
+              const SizedBox(height: 24),
+
+              // Edit button
+              ElevatedButton.icon(
+                onPressed: state.isUpdating ? null : () => _showEditDialog(context, ref, user),
+                icon: const Icon(Icons.edit),
+                label: state.isUpdating
+                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Text('Edit Profile'),
+              ),
+
+              // Action error message (update/logout failures)
+              if (state.hasActionError) ...[
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(color: Colors.red.shade50, borderRadius: BorderRadius.circular(8)),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.error, color: Colors.red, size: 20),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(state.actionError!, style: TextStyle(color: Colors.redAccent)),
+                      ),
+                      IconButton(icon: const Icon(Icons.close, size: 18), onPressed: notifier.clearActionError),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -145,8 +146,8 @@ class UserProfileScreen extends HookConsumerWidget {
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(context);
-              await notifier.logout();
-              if (context.mounted) {
+              final success = await notifier.logout();
+              if (success && context.mounted) {
                 context.go('/login'); // Navigate to login after logout
               }
             },
