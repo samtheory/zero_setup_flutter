@@ -94,10 +94,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       // 👤 Example User Feature Route
-      GoRoute(
-        path: Routes.exUserProfile,
-        builder: (context, state) => const UserProfileScreen(),
-      ),
+      GoRoute(path: Routes.exUserProfile, builder: (context, state) => const UserProfileScreen()),
 
       // 🏠 Main Shell با Bottom Navigation
       StatefulShellRoute.indexedStack(

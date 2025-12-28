@@ -36,11 +36,11 @@ final logoutUseCaseProvider = Provider<LogoutUseCase>((ref) {
 
 // ═══════════════════════════════════════════════════════════════════════════
 // NOTIFIER (Controller)
-// 
+//
 // This is your "Controller" - it contains:
 // - Current state (UserState)
 // - All actions the user can perform
-// 
+//
 // Pattern: Notifier<State> = State + Actions combined
 // ═══════════════════════════════════════════════════════════════════════════
 

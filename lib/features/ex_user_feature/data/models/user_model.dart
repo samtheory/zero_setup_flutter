@@ -15,19 +15,13 @@ sealed class UserModel with _$UserModel {
     DateTime? createdAt,
   }) = _UserModel;
 
-  factory UserModel.fromJson(Map<String, dynamic> json) =>
-      _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 }
 
 /// Request model for updating user profile
 @freezed
 sealed class UpdateUserRequest with _$UpdateUserRequest {
-  const factory UpdateUserRequest({
-    required String name,
-    String? phone,
-    String? avatarUrl,
-  }) = _UpdateUserRequest;
+  const factory UpdateUserRequest({required String name, String? phone, String? avatarUrl}) = _UpdateUserRequest;
 
-  factory UpdateUserRequest.fromJson(Map<String, dynamic> json) =>
-      _$UpdateUserRequestFromJson(json);
+  factory UpdateUserRequest.fromJson(Map<String, dynamic> json) => _$UpdateUserRequestFromJson(json);
 }

@@ -5,10 +5,10 @@ import '../../../../core/logger/app_logger.dart';
 import '../repositories/user_repository.dart';
 
 /// UseCase: Logout user
-/// 
+///
 /// UseCases encapsulate a single business operation.
 /// They orchestrate multiple repositories/services if needed.
-/// 
+///
 /// Benefits:
 /// - Single responsibility
 /// - Reusable across different UI components

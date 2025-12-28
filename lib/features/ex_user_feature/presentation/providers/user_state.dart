@@ -5,7 +5,7 @@ import '../../data/models/user_model.dart';
 part 'user_state.freezed.dart';
 
 /// User profile state
-/// 
+///
 /// This is a pure DATA class - it only holds state, no logic.
 /// All state mutations happen in the Notifier (controller).
 @freezed
