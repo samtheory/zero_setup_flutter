@@ -154,8 +154,6 @@ extension OsrmRouteResponsePatterns on OsrmRouteResponse {
     switch (_that) {
       case _OsrmRouteResponse():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -241,8 +239,6 @@ extension OsrmRouteResponsePatterns on OsrmRouteResponse {
     switch (_that) {
       case _OsrmRouteResponse():
         return $default(_that.code, _that.routes, _that.waypoints);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -583,8 +579,6 @@ extension OsrmRoutePatterns on OsrmRoute {
     switch (_that) {
       case _OsrmRoute():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -690,8 +684,6 @@ extension OsrmRoutePatterns on OsrmRoute {
           _that.legs,
           _that.weightName,
         );
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -1031,8 +1023,6 @@ extension OsrmGeometryPatterns on OsrmGeometry {
     switch (_that) {
       case _OsrmGeometry():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -1108,8 +1098,6 @@ extension OsrmGeometryPatterns on OsrmGeometry {
     switch (_that) {
       case _OsrmGeometry():
         return $default(_that.type, _that.coordinates);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -1395,8 +1383,6 @@ extension OsrmLegPatterns on OsrmLeg {
     switch (_that) {
       case _OsrmLeg():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -1498,8 +1484,6 @@ extension OsrmLegPatterns on OsrmLeg {
           _that.summary,
           _that.steps,
         );
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -1891,8 +1875,6 @@ extension OsrmStepPatterns on OsrmStep {
     switch (_that) {
       case _OsrmStep():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -2006,8 +1988,6 @@ extension OsrmStepPatterns on OsrmStep {
           _that.drivingSide,
           _that.intersections,
         );
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -2432,8 +2412,6 @@ extension OsrmManeuverPatterns on OsrmManeuver {
     switch (_that) {
       case _OsrmManeuver():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -2539,8 +2517,6 @@ extension OsrmManeuverPatterns on OsrmManeuver {
           _that.modifier,
           _that.exit,
         );
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -2900,8 +2876,6 @@ extension OsrmIntersectionPatterns on OsrmIntersection {
     switch (_that) {
       case _OsrmIntersection():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -3003,8 +2977,6 @@ extension OsrmIntersectionPatterns on OsrmIntersection {
           _that.out,
           _that.inIndex,
         );
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -3348,8 +3320,6 @@ extension OsrmWaypointPatterns on OsrmWaypoint {
     switch (_that) {
       case _OsrmWaypoint():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -3437,8 +3407,6 @@ extension OsrmWaypointPatterns on OsrmWaypoint {
     switch (_that) {
       case _OsrmWaypoint():
         return $default(_that.hint, _that.location, _that.name, _that.distance);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -3862,8 +3830,6 @@ extension NavigationDataPatterns on NavigationData {
     switch (_that) {
       case _NavigationData():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -4005,8 +3971,6 @@ extension NavigationDataPatterns on NavigationData {
           _that.remainingDistanceMeters,
           _that.remainingDurationSeconds,
         );
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -4561,8 +4525,6 @@ extension NavigationStepPatterns on NavigationStep {
     switch (_that) {
       case _NavigationStep():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -4688,8 +4650,6 @@ extension NavigationStepPatterns on NavigationStep {
           _that.modifier,
           _that.stepPoints,
         );
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 

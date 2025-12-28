@@ -34,7 +34,7 @@ class HomeScreen extends HookConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Text(
-                'Notifier State Controller',
+                'Sample Section',
                 style: Theme.of(
                   context,
                 ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold, color: Colors.blue[800]),
@@ -70,9 +70,9 @@ class HomeScreen extends HookConsumerWidget {
                 ),
                 _GridItem(
                   icon: Icons.person,
-                  title: 'Family',
+                  title: 'user_info',
                   color: Colors.orange,
-                  onTap: () => talker.good('Profile tapped'),
+                  onTap: () => context.push(Routes.exUserProfile),
                 ),
               ],
             ),

@@ -17,4 +17,7 @@ abstract class Routes {
   static const testFeature = '/test-feature';
   static const testFeatureDetail = '/test-feature/detail';
   static const testFeatureForm = '/test-feature/form';
+
+  // Example User Feature
+  static const exUserProfile = '/ex-user-profile';
 }

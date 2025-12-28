@@ -27,6 +27,7 @@ import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/test_feature/presentation/screens/item_list_screen.dart';
 import '../../features/test_feature/presentation/screens/item_detail_screen.dart';
 import '../../features/test_feature/presentation/screens/item_form_screen.dart';
+import '../../features/ex_user_feature/presentation/screens/user_profile_screen.dart';
 import 'routes.dart';
 
 /// کلید Navigator برای refresh
@@ -90,6 +91,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.map,
         pageBuilder: (context, state) => const NoTransitionPage(child: MapScreen()),
+      ),
+
+      // 👤 Example User Feature Route
+      GoRoute(
+        path: Routes.exUserProfile,
+        builder: (context, state) => const UserProfileScreen(),
       ),
 
       // 🏠 Main Shell با Bottom Navigation

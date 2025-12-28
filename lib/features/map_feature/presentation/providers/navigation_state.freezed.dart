@@ -268,8 +268,6 @@ extension NavigationStatePatterns on NavigationState {
     switch (_that) {
       case _NavigationState():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -395,8 +393,6 @@ extension NavigationStatePatterns on NavigationState {
           _that.errorMessage,
           _that.lastUpdated,
         );
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
