@@ -5,6 +5,9 @@
 // Usage: import 'package:zero_setup_flutter/core/core.dart';
 // ═══════════════════════════════════════════════════════════════════════════
 
+// Database (Drift/SQLite)
+export 'database/database.dart';
+
 // Logger
 export 'logger/app_logger.dart';
 

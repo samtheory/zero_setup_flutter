@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
+import '../database/app_database.dart';
 import '../logger/app_logger.dart';
 import '../network/dio_client.dart';
 import '../storage/preferences_service.dart';
@@ -23,6 +24,16 @@ final secureStorageProvider = Provider<SecureStorageService>((ref) {
 
 final preferencesServiceProvider = Provider<PreferencesService>((ref) {
   return PreferencesService();
+});
+
+// ═══════════════════════════════════════════════════════════════
+// Database Provider (Drift/SQLite)
+// ═══════════════════════════════════════════════════════════════
+
+final appDatabaseProvider = Provider<AppDatabase>((ref) {
+  final db = AppDatabase();
+  ref.onDispose(() => db.close());
+  return db;
 });
 
 // ═══════════════════════════════════════════════════════════════
