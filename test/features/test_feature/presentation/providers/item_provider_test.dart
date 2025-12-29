@@ -5,7 +5,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:zero_setup_flutter/features/test_feature/data/models/item_model.dart';
 import 'package:zero_setup_flutter/features/test_feature/domain/repositories/item_repository.dart';
 import 'package:zero_setup_flutter/features/test_feature/presentation/providers/item_provider.dart';
-import 'package:zero_setup_flutter/features/test_feature/presentation/providers/item_state.dart';
 import 'package:zero_setup_flutter/core/storage/preferences_service.dart';
 import 'package:zero_setup_flutter/core/providers/core_providers.dart';
 

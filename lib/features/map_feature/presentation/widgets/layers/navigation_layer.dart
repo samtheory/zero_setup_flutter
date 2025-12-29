@@ -5,7 +5,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:zero_setup_flutter/features/map_feature/map_feature.dart';
 
-import '../../../data/models/navigation_models.dart';
 
 /// Layer widget that displays navigation route on the map
 class NavigationLayer extends StatelessWidget {

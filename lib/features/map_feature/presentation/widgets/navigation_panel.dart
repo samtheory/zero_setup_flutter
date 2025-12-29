@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zero_setup_flutter/features/map_feature/map_feature.dart';
 
-import '../providers/navigation_state.dart';
 
 /// Google Maps-style navigation panel with turn-by-turn directions
 class NavigationPanel extends StatelessWidget {

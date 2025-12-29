@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hooks_riverpod/legacy.dart';
-import 'package:mocktail/mocktail.dart';
 
 import 'package:zero_setup_flutter/features/test_feature/data/models/item_model.dart';
 import 'package:zero_setup_flutter/features/test_feature/presentation/providers/item_provider.dart';

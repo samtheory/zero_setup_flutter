@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../core/logger/app_logger.dart';
-import '../../data/models/map_models.dart';
 import '../providers/map_provider.dart';
 import '../providers/map_state.dart';
 import '../providers/navigation_provider.dart';
