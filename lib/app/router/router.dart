@@ -44,8 +44,21 @@ final routerProvider = Provider<GoRouter>((ref) {
     navigatorKey: _rootNavigatorKey,
     initialLocation: Routes.home,
     debugLogDiagnostics: true, // برای دیباگ - توی Production غیرفعال کن
-    // 🛡️ Auth Guard
+
     redirect: (context, state) {
+      final uri = state.uri;
+
+      // Handle zeroapp://map
+      if (uri.scheme == 'zeroapp' && uri.host == 'map') {
+        return Routes.map;
+      }
+      // Handle zeroapp://map?id=123&mode=view
+      if (uri.scheme == 'zeroapp' && uri.host == 'map') {
+        final query = uri.query.isNotEmpty ? '?${uri.query}' : '';
+        return '${Routes.map}$query';
+      }
+      
+      // 🛡️ Auth Guard
       final isLoggedIn = authState.isAuthenticated;
       final isLoggingIn = state.matchedLocation == Routes.login;
 
@@ -61,6 +74,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       // در غیر این صورت، اجازه بده
       return null;
+      // 🛡️End of ------> Auth Guard
     },
 
     routes: [
