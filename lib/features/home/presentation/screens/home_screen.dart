@@ -50,24 +50,23 @@ class HomeScreen extends HookConsumerWidget {
               childAspectRatio: 0.9,
               children: [
                 _GridItem(
-                  icon: Icons.dashboard,
-                  title: 'normal',
-                  color: Colors.blue,
+                  icon: Icons.map,
+                  title: 'Map',
+                  color: Colors.red,
                   onTap: () {
-                    // context.goNamed(Routes.normalNotifier);
-                    // context.push(Routes.normalNotifier);
-                    // talker.good(Routes.normalNotifier);
+                    context.push(Routes.map);
+                    talker.good('Map tapped');
                   },
                 ),
-                _GridItem(
-                  icon: Icons.settings,
-                  title: 'Async',
-                  color: Colors.green,
-                  onTap: () {
-                    talker.good('Settings tapped');
-                    // context.push(Routes.userProfile);
-                  },
-                ),
+                // _GridItem(
+                //   icon: Icons.settings,
+                //   title: 'Async',
+                //   color: Colors.green,
+                //   onTap: () {
+                //     talker.good('Settings tapped');
+                //     // context.push(Routes.userProfile);
+                //   },
+                // ),
                 _GridItem(
                   icon: Icons.person,
                   title: 'user_info',
@@ -81,7 +80,7 @@ class HomeScreen extends HookConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Text(
-                'Plugin Features',
+                'Test Features',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
@@ -94,24 +93,24 @@ class HomeScreen extends HookConsumerWidget {
               mainAxisSpacing: 8.0,
               childAspectRatio: 0.9,
               children: [
+                // _GridItem(
+                //   icon: Icons.map,
+                //   title: 'Map',
+                //   color: Colors.red,
+                //   onTap: () {
+                //     context.push(Routes.map);
+                //     talker.good('Map tapped');
+                //   },
+                // ),
+                // _GridItem(
+                //   icon: Icons.search,
+                //   title: 'Search',
+                //   color: Colors.purple,
+                //   onTap: () => talker.good('Search tapped'),
+                // ),
                 _GridItem(
-                  icon: Icons.map,
-                  title: 'Map',
-                  color: Colors.red,
-                  onTap: () {
-                    context.push(Routes.map);
-                    talker.good('Map tapped');
-                  },
-                ),
-                _GridItem(
-                  icon: Icons.search,
-                  title: 'Search',
-                  color: Colors.purple,
-                  onTap: () => talker.good('Search tapped'),
-                ),
-                _GridItem(
-                  icon: Icons.favorite,
-                  title: 'Favorites',
+                  icon: Icons.data_array,
+                  title: 'DB Test',
                   color: Colors.pink,
                   onTap: () {
                     context.push(Routes.favScreen);

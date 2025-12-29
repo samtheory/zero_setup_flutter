@@ -16,7 +16,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zero_setup_flutter/features/fav/presentation/screen/fav_screen.dart';
+import 'package:zero_setup_flutter/features/fav/presentation/screen/db_test_screen.dart';
 import 'package:zero_setup_flutter/features/map_feature/presentation/screens/map_screen.dart';
 
 import '../shells/main_shell/main_shell.dart';
@@ -112,7 +112,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
               GoRoute(
                 path: Routes.favScreen,
-                pageBuilder: (context, state) => const NoTransitionPage(child: FavScreen()),
+                pageBuilder: (context, state) => const NoTransitionPage(child: DBTestScreen()),
               ),
             ],
           ),

@@ -14,8 +14,8 @@ import '../../../../core/core.dart';
 // 3. Drift (SQLite) - Relational database with JSON support
 // ═══════════════════════════════════════════════════════════════════════════
 
-class FavScreen extends HookConsumerWidget {
-  const FavScreen({super.key});
+class DBTestScreen extends HookConsumerWidget {
+  const DBTestScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
