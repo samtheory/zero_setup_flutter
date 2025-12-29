@@ -26,6 +26,6 @@ class GoodLog extends TalkerLog {
 extension TalkerGoodExtension on Talker {
   /// Log a success message with green color
   void good(String message) {
-    logTyped(GoodLog(message));
+    logCustom(GoodLog(message));
   }
 }
