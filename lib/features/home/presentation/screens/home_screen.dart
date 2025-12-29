@@ -113,7 +113,10 @@ class HomeScreen extends HookConsumerWidget {
                   icon: Icons.favorite,
                   title: 'Favorites',
                   color: Colors.pink,
-                  onTap: () => talker.good('Favorites tapped'),
+                  onTap: () {
+                    context.push(Routes.favScreen);
+                    talker.good('Favorites tapped');
+                  },
                 ),
               ],
             ),

@@ -20,4 +20,5 @@ abstract class Routes {
 
   // Example User Feature
   static const exUserProfile = '/ex-user-profile';
+  static const favScreen = '/fav-screen';
 }
