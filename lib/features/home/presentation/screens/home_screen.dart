@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -7,129 +10,165 @@ import 'package:zero_setup_flutter/core/logger/app_logger.dart';
 import 'package:zero_setup_flutter/app/router/routes.dart';
 
 class HomeScreen extends HookConsumerWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  // +++++++++++++++++++++=== Pip Screen overlay ===+++++++++++++++++++++++++++++++++
+  final floating = Floating();
+
+  Future<void> enablePip(BuildContext context, {bool autoEnable = false}) async {
+    final screenSize = MediaQuery.of(context).size * MediaQuery.of(context).devicePixelRatio;
+    final width = (screenSize.width * 0.8).toInt();
+    final height = (screenSize.height * 0.8).toInt();
+    final rational = Rational(4, 3);
+
+    final arguments = autoEnable
+        ? OnLeavePiP(
+            aspectRatio: rational,
+            sourceRectHint: Rectangle<int>(0, (screenSize.height ~/ 2) - (height ~/ 2), width, height),
+          )
+        : ImmediatePiP(
+            aspectRatio: rational,
+            sourceRectHint: Rectangle<int>(0, (screenSize.height ~/ 2) - (height ~/ 2), width, height),
+          );
+
+    final status = await floating.enable(arguments);
+    debugPrint('PiP enabled? $status');
+  }
+  // +++++++++++++++++++++=== END-> Pip Screen overlay ===+++++++++++++++++++++++++++++++++
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        // backgroundColor: const Color(0xFF27223D),
-        // elevation: 5,
-        foregroundColor: Colors.indigoAccent[100],
-        centerTitle: true,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [Icon(LucideIcons.house400, size: 22), Gap(4), const Text('خانه')],
+    return PiPSwitcher(
+      childWhenDisabled: Scaffold(
+        appBar: AppBar(
+          // backgroundColor: const Color(0xFF27223D),
+          // elevation: 5,
+          foregroundColor: Colors.indigoAccent[100],
+          centerTitle: true,
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [Icon(LucideIcons.house400, size: 22), Gap(4), const Text('خانه')],
+          ),
+        ),
+        body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: const Center(
+                child: Padding(padding: EdgeInsets.all(16.0), child: _Welcome()),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Text(
+                  'Sample Section',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold, color: Colors.blue[800]),
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              sliver: SliverGrid.count(
+                crossAxisCount: 3,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+                childAspectRatio: 0.9,
+                children: [
+                  _GridItem(
+                    icon: Icons.map,
+                    title: 'Map',
+                    color: Colors.red,
+                    onTap: () {
+                      context.push(Routes.map);
+                      talker.good('Map tapped');
+                    },
+                  ),
+                  _GridItem(
+                    icon: Icons.fit_screen_outlined,
+                    title: 'pip',
+                    color: Colors.green,
+                    onTap: () async {
+                      final isPipAvailable = await floating.isPipAvailable;
+                      enablePip(context, autoEnable: false);
+                      talker.good('Pip $isPipAvailable');
+                      // talker.good('Settings tapped');
+                      // context.push(Routes.userProfile);
+                    },
+                  ),
+                  _GridItem(
+                    icon: Icons.person,
+                    title: 'user_info',
+                    color: Colors.orange,
+                    onTap: () => context.push(Routes.exUserProfile),
+                  ),
+                ],
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Text(
+                  'Test Features',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              sliver: SliverGrid.count(
+                crossAxisCount: 3,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+                childAspectRatio: 0.9,
+                children: [
+                  // _GridItem(
+                  //   icon: Icons.map,
+                  //   title: 'Map',
+                  //   color: Colors.red,
+                  //   onTap: () {
+                  //     context.push(Routes.map);
+                  //     talker.good('Map tapped');
+                  //   },
+                  // ),
+                  // _GridItem(
+                  //   icon: Icons.search,
+                  //   title: 'Search',
+                  //   color: Colors.purple,
+                  //   onTap: () => talker.good('Search tapped'),
+                  // ),
+                  _GridItem(
+                    icon: Icons.data_array,
+                    title: 'DB Test',
+                    color: Colors.pink,
+                    onTap: () {
+                      context.push(Routes.favScreen);
+                      talker.good('Favorites tapped');
+                    },
+                  ),
+                ],
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: const SizedBox(height: 80), // Space for FAB
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // Navigate to testing screen or add new feature
+          },
+          child: const Icon(Icons.add),
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: const Center(
-              child: Padding(padding: EdgeInsets.all(16.0), child: _Welcome()),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Text(
-                'Sample Section',
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold, color: Colors.blue[800]),
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            sliver: SliverGrid.count(
-              crossAxisCount: 3,
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
-              childAspectRatio: 0.9,
-              children: [
-                _GridItem(
-                  icon: Icons.map,
-                  title: 'Map',
-                  color: Colors.red,
-                  onTap: () {
-                    context.push(Routes.map);
-                    talker.good('Map tapped');
-                  },
-                ),
-                // _GridItem(
-                //   icon: Icons.settings,
-                //   title: 'Async',
-                //   color: Colors.green,
-                //   onTap: () {
-                //     talker.good('Settings tapped');
-                //     // context.push(Routes.userProfile);
-                //   },
-                // ),
-                _GridItem(
-                  icon: Icons.person,
-                  title: 'user_info',
-                  color: Colors.orange,
-                  onTap: () => context.push(Routes.exUserProfile),
-                ),
-              ],
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Text(
-                'Test Features',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            sliver: SliverGrid.count(
-              crossAxisCount: 3,
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
-              childAspectRatio: 0.9,
-              children: [
-                // _GridItem(
-                //   icon: Icons.map,
-                //   title: 'Map',
-                //   color: Colors.red,
-                //   onTap: () {
-                //     context.push(Routes.map);
-                //     talker.good('Map tapped');
-                //   },
-                // ),
-                // _GridItem(
-                //   icon: Icons.search,
-                //   title: 'Search',
-                //   color: Colors.purple,
-                //   onTap: () => talker.good('Search tapped'),
-                // ),
-                _GridItem(
-                  icon: Icons.data_array,
-                  title: 'DB Test',
-                  color: Colors.pink,
-                  onTap: () {
-                    context.push(Routes.favScreen);
-                    talker.good('Favorites tapped');
-                  },
-                ),
-              ],
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: const SizedBox(height: 80), // Space for FAB
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to testing screen or add new feature
-        },
-        child: const Icon(Icons.add),
+
+      childWhenEnabled: Container(
+        color: Colors.blue,
+        child: const Center(
+          child: Text('PiP Mode', style: TextStyle(color: Colors.white, fontSize: 24)),
+        ),
       ),
     );
   }
