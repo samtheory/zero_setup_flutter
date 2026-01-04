@@ -3,6 +3,7 @@
 ## Suggestions for Project Structure and Libraries
 
 ### 1. Database Migration
+
 **Issue**: Architecture docs specify Isar, but pubspec uses Drift.
 **Recommendation**: Migrate to Isar for better performance and features.
 
