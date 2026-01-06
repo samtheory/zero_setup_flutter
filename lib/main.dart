@@ -14,12 +14,12 @@ Future<void> main() async {
 
   final secureStorage = SecureStorageService();
 
-  // +++++++++++++++++++NFC++++++++++++++++++++
+
 
   // Initialize your providers
   final container = ProviderContainer();
 
-  // +++++++++++++++++++NFC++++++++++++++++++++
+
 
   runApp(
     ProviderScope(
