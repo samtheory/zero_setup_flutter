@@ -1,3 +1,6 @@
+// this file contains service initializers for the bootstrap process
+// CURRENTLY UNUSED - 
+
 import 'package:flutter/foundation.dart';
 import 'package:zero_setup_flutter/core/logger/app_logger.dart';
 
