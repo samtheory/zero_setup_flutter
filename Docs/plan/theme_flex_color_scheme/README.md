@@ -24,10 +24,18 @@ This document outlines the complete migration from your custom theme system to *
 - ✅ Shadow and gradient systems
 - ✅ Persian language support in theme switching
 
+## 📋 Designer Collaboration
+
+- 🎨 **[Designer Guide Available](designer_guide.md)**: Complete Figma workflow for theme definition
+- 🔄 **Seamless Handoff**: Designers can work independently using established color tokens
+- 📐 **Consistent Implementation**: Standardized component variants and interaction states
+- 🌙 **Dark Mode Ready**: Automatic dark mode generation with manual refinement guidelines
+
 ## Migration Steps
 
 ### Phase 1: Analysis & Planning ✅
 - [x] [00_analysis_and_plan.md](00_analysis_and_plan.md) - Current system analysis and migration strategy
+- [x] **[designer_guide.md](designer_guide.md)** - **NEW!** Complete guide for designers working with Figma
 
 ### Phase 2: Setup & Foundation ✅
 - [x] [01_setup_flex_color_scheme.md](01_setup_flex_color_scheme.md) - Installation and basic setup
