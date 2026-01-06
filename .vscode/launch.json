@@ -1,0 +1,77 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Dev (Development)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_dev.dart",
+      "args": [
+        "--flavor",
+        "dev"
+      ],
+      "toolArgs": [
+        "--flavor",
+        "dev"
+      ]
+    },
+    {
+      "name": "Staging",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "args": [
+        "--flavor",
+        "staging"
+      ],
+      "toolArgs": [
+        "--flavor",
+        "staging"
+      ]
+    },
+    {
+      "name": "Prod (Production)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_prod.dart",
+      "args": [
+        "--flavor",
+        "prod"
+      ],
+      "toolArgs": [
+        "--flavor",
+        "prod"
+      ]
+    },
+    {
+      "name": "Dev (Profile Mode)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_dev.dart",
+      "flutterMode": "profile",
+      "args": [
+        "--flavor",
+        "dev"
+      ],
+      "toolArgs": [
+        "--flavor",
+        "dev"
+      ]
+    },
+    {
+      "name": "Prod (Release Mode)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_prod.dart",
+      "flutterMode": "release",
+      "args": [
+        "--flavor",
+        "prod"
+      ],
+      "toolArgs": [
+        "--flavor",
+        "prod"
+      ]
+    }
+  ]
+}
