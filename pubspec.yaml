@@ -54,6 +54,7 @@ dependencies:
   # UI Components
   # ============================================
   flex_color_scheme: ^8.4.0 # Flexible color schemes for Material themes
+  auto_size_text: ^3.0.0 # Auto-sizing text for responsive typography
   responsive_framework: ^1.5.1 # Responsive UI framework
   cached_network_image: ^3.4.1 # Image caching and loading
   shimmer: ^3.0.0 # Loading shimmer effects
