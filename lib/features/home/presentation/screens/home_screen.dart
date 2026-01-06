@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:zero_setup_flutter/core/logger/app_logger.dart';
 import 'package:zero_setup_flutter/app/router/routes.dart';
+import 'package:zero_setup_flutter/core/services/foreground_task/foreground_task.dart';
 
 class HomeScreen extends HookConsumerWidget {
   HomeScreen({super.key});
@@ -92,10 +93,21 @@ class HomeScreen extends HookConsumerWidget {
                     color: Colors.green,
                     onTap: () async {
                       final isPipAvailable = await floating.isPipAvailable;
+                      if (!context.mounted) return;
                       enablePip(context, autoEnable: false);
                       talker.good('Pip $isPipAvailable');
-                      // talker.good('Settings tapped');
-                      // context.push(Routes.userProfile);
+                    },
+                  ),
+                  _GridItem(
+                    icon: LucideIcons.alarmClock,
+                    title: 'Reminder',
+                    color: Colors.deepPurple,
+                    onTap: () async {
+                      await PipReminderController.instance.toggle(context);
+
+                      final isRunning = await ForegroundTaskService.instance.isRunning;
+                      if (!context.mounted) return;
+                      talker.good('Driver reminder ${isRunning ? "started" : "stopped"}');
                     },
                   ),
                   _GridItem(
@@ -164,12 +176,7 @@ class HomeScreen extends HookConsumerWidget {
         ),
       ),
 
-      childWhenEnabled: Container(
-        color: Colors.blue,
-        child: const Center(
-          child: Text('PiP Mode', style: TextStyle(color: Colors.white, fontSize: 24)),
-        ),
-      ),
+      childWhenEnabled: const PipReminderScreen(message: 'Stay focused on the road! 🚗'),
     );
   }
 }
