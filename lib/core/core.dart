@@ -26,3 +26,6 @@ export 'services/notification/notification.dart';
 export 'storage/preferences_service.dart';
 export 'storage/secure_storage_service.dart';
 export 'storage/storage_keys.dart';
+
+// Theme - NOVA Design System
+export 'theme/nova.dart';
