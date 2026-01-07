@@ -585,21 +585,22 @@ import 'nova_gradients.dart';
 /// Theme mode state
 enum NovaThemeMode { light, dark, system }
 
-/// Theme mode notifier
-class NovaThemeModeNotifier extends StateNotifier<NovaThemeMode> {
-  NovaThemeModeNotifier() : super(NovaThemeMode.system);
+/// Theme mode notifier (Modern Riverpod Notifier)
+class NovaThemeModeNotifier extends Notifier<NovaThemeMode> {
+  @override
+  NovaThemeMode build() => NovaThemeMode.system; // Initial state
 
   void setLight() => state = NovaThemeMode.light;
   void setDark() => state = NovaThemeMode.dark;
   void setSystem() => state = NovaThemeMode.system;
-  void toggle() => state = state == NovaThemeMode.light 
-      ? NovaThemeMode.dark 
+  void toggle() => state = state == NovaThemeMode.light
+      ? NovaThemeMode.dark
       : NovaThemeMode.light;
 }
 
 /// Providers
-final novaThemeModeProvider = StateNotifierProvider<NovaThemeModeNotifier, NovaThemeMode>(
-  (ref) => NovaThemeModeNotifier(),
+final novaThemeModeProvider = NotifierProvider<NovaThemeModeNotifier, NovaThemeMode>(
+  () => NovaThemeModeNotifier(),
 );
 
 final novaThemeModeValueProvider = Provider<ThemeMode>((ref) {

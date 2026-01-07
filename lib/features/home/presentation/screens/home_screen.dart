@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:zero_setup_flutter/core/core.dart';
 import 'package:zero_setup_flutter/core/logger/app_logger.dart';
 import 'package:zero_setup_flutter/app/router/routes.dart';
 import 'package:zero_setup_flutter/core/services/foreground_task/foreground_task.dart';
@@ -101,7 +102,7 @@ class HomeScreen extends HookConsumerWidget {
                   _GridItem(
                     icon: LucideIcons.alarmClock,
                     title: 'Reminder',
-                    color: Colors.deepPurple,
+                    color: context.nova.colors.purple.shade70,
                     onTap: () async {
                       await PipReminderController.instance.toggle(context);
 
