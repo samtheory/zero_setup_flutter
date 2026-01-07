@@ -11,7 +11,7 @@ class NovaGradients extends ThemeExtension<NovaGradients> {
     required this.ocean,
     required this.sunset,
     required this.purple,
-    required this.dark,
+    required this.neutral,
   });
 
   final LinearGradient primary;
@@ -22,7 +22,7 @@ class NovaGradients extends ThemeExtension<NovaGradients> {
   final LinearGradient ocean;
   final LinearGradient sunset;
   final LinearGradient purple;
-  final LinearGradient dark;
+  final LinearGradient neutral;
 
   static const light = NovaGradients(
     primary: LinearGradient(
@@ -65,7 +65,7 @@ class NovaGradients extends ThemeExtension<NovaGradients> {
       end: Alignment.bottomRight,
       colors: [Color(0xFFA855F7), Color(0xFF9333EA)],
     ),
-    dark: LinearGradient(
+    neutral: LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [Color(0xFF374151), Color(0xFF1F2937)],
@@ -113,7 +113,7 @@ class NovaGradients extends ThemeExtension<NovaGradients> {
       end: Alignment.bottomRight,
       colors: [Color(0xFFC084FC), Color(0xFFA855F7)],
     ),
-    dark: LinearGradient(
+    neutral: LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [Color(0xFF4B5563), Color(0xFF374151)],
@@ -130,7 +130,7 @@ class NovaGradients extends ThemeExtension<NovaGradients> {
     LinearGradient? ocean,
     LinearGradient? sunset,
     LinearGradient? purple,
-    LinearGradient? dark,
+    LinearGradient? neutral,
   }) {
     return NovaGradients(
       primary: primary ?? this.primary,
@@ -141,7 +141,7 @@ class NovaGradients extends ThemeExtension<NovaGradients> {
       ocean: ocean ?? this.ocean,
       sunset: sunset ?? this.sunset,
       purple: purple ?? this.purple,
-      dark: dark ?? this.dark,
+      neutral: neutral ?? this.neutral,
     );
   }
 
@@ -157,7 +157,7 @@ class NovaGradients extends ThemeExtension<NovaGradients> {
       ocean: LinearGradient.lerp(ocean, other.ocean, t)!,
       sunset: LinearGradient.lerp(sunset, other.sunset, t)!,
       purple: LinearGradient.lerp(purple, other.purple, t)!,
-      dark: LinearGradient.lerp(dark, other.dark, t)!,
+      neutral: LinearGradient.lerp(neutral, other.neutral, t)!,
     );
   }
 }
