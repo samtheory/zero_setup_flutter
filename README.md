@@ -16,33 +16,40 @@ A Flutter project template designed for rapid development with pre-configured to
 ## Getting Started
 
 ### Prerequisites
+
 - Flutter SDK (latest stable version)
 - Android Studio or VS Code with Flutter extensions
 - Dart SDK
 
 ### Installation
+
 1. Clone the repository:
+
    ```bash
    git clone <your-repo-url>
    cd zero_setup_flutter
    ```
 
 2. Install dependencies:
+
    ```bash
    flutter pub get
    ```
 
 3. Generate code (for Freezed, JSON, etc.):
+
    ```bash
    flutter pub run build_runner build
    ```
 
 4. Run the app:
+
    ```bash
    flutter run
    ```
 
 ### Project Structure
+
 ```
 lib/
 ├── core/          # App-wide configurations (themes, routers)
@@ -68,38 +75,61 @@ lib/
 ## Setup for Specific Packages
 
 ### Riverpod (State Management)
+
 - Use `ProviderScope` in `main.dart` to wrap your app.
 - Create providers in `lib/shared/providers/` for global state.
 
 ### Isar (Database)
+
 - Initialize Isar in `main.dart`:
+
   ```dart
   final isar = await Isar.open([YourSchema]);
   ```
+
 - Use collections for CRUD operations.
 
 ### Networking with Dio/Retrofit
+
 - Define API interfaces with Retrofit annotations.
 - Add interceptors for logging in Dio.
 
 ### Environment Variables (Envied)
+
 - Create `.env` files and annotate classes with `@Envied()`.
 - Run `flutter pub run build_runner build` to generate accessors.
 
 ## Testing
+
 - Write unit tests with Mocktail.
 - Run tests: `flutter test`
 
 ## Troubleshooting
+
 - **Freezed Build Errors**: Run `flutter pub run build_runner build` after changes. Ensure annotations are correct.
 - **Gradle Issues**: For Android builds, check `android/build.gradle` versions.
 - **Pub Cache**: If dependencies fail, run `flutter pub cache repair`.
 
 ## Contributing
+
 1. Fork the repo.
 2. Create a feature branch.
 3. Make changes and run tests.
 4. Submit a PR.
 
 ## License
+
 This project is licensed under the MIT License.
+
+# Lunch the App with Different Environments
+
+```dart
+# Development
+flutter run --flavor dev -t lib/main_dev.dart
+
+# Staging  
+flutter run --flavor staging -t lib/main_staging.dart
+
+# Production
+flutter run --flavor prod -t lib/main_prod.dart
+```

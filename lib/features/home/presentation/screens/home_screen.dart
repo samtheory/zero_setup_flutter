@@ -6,9 +6,11 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:zero_setup_flutter/core/core.dart';
 import 'package:zero_setup_flutter/core/logger/app_logger.dart';
 import 'package:zero_setup_flutter/app/router/routes.dart';
 import 'package:zero_setup_flutter/core/services/foreground_task/foreground_task.dart';
+import 'package:zero_setup_flutter/shared/nova_components/nova_components.dart';
 
 class HomeScreen extends HookConsumerWidget {
   HomeScreen({super.key});
@@ -49,7 +51,7 @@ class HomeScreen extends HookConsumerWidget {
           title: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Icon(LucideIcons.house400, size: 22), Gap(4), const Text('خانه')],
+            children: [Icon(LucideIcons.house400, size: 22), Gap(4), NovaText.heading('خانه')],
           ),
         ),
         body: CustomScrollView(
@@ -101,7 +103,7 @@ class HomeScreen extends HookConsumerWidget {
                   _GridItem(
                     icon: LucideIcons.alarmClock,
                     title: 'Reminder',
-                    color: Colors.deepPurple,
+                    color: context.nova.colors.purple.shade70,
                     onTap: () async {
                       await PipReminderController.instance.toggle(context);
 
