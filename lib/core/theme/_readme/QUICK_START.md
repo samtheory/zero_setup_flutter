@@ -56,6 +56,14 @@ context.nova.gradients.ocean
 ### Components
 ```dart
 // Text (auto-sizing)
+NovaText.heading('My Title')
+NovaText.body('Some body text')
+NovaText.auto('Auto-sizing text')
+NovaText.heading('My Title')
+NovaText.body('Some body text')
+NovaText.auto('Auto-sizing text')
+
+// Text extention --need to be implement if needed it's on the docs
 Text.novaHeading('Title')
 Text.novaBody('Content')
 
